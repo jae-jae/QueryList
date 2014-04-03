@@ -1,14 +1,15 @@
 <?php
 	/**
-	 * Created by SublimeText2.
-	 * User:JAE
-	 * Date: 2014-1-7
-	 * Blog:http://blog.jaekj.com
-	 * QQ:734708094
-	 * 通用列表采集类
-	 * 版本:V1.6
+	 * QueryList
+	 *
+	 * 一个基于phpQuery的通用列表采集类
+	 * 
+	 * @author 			Jaeger
+	 * @email 			734708094@qq.com
+	 * @link            http://git.oschina.net/jae/QueryList
+	 * @version         1.6.0     
 	 */
-	require_once 'phpQuery/phpQuery.php';
+	require('phpQuery/phpQuery.php');
 	class QueryList{
 		
 		 private $pageURL;
@@ -24,9 +25,9 @@
 		  * @param array  $regArr         【选择器数组】说明：格式array("名称"=>array("选择器","类型"),.......),【类型】说明：值 "text" ,"html" ,"属性" 
 		  * @param string $regRange       【块选择器】：指 先按照规则 选出 几个大块 ，然后再分别再在块里面 进行相关的选择
 		  * @param string $getHtmlWay     【源码获取方式】指是通过curl抓取源码，还是通过file_get_contents抓取源码
-		  * @param string $output_encoding【输出编码格式】指要以什么编码输出，防止出现乱码,如果设置为 假值 则不改变原字符串编码
+		  * @param string $output_encoding【输出编码格式】指要以什么编码输出(UTF-8,GB2312,.....)，防止出现乱码,如果设置为 假值 则不改变原字符串编码
 		  */
-		 function QueryList($page,$regArr=array(),$regRange='',$getHtmlWay="curl",$output_encoding="UTF-8")
+		public function QueryList($page,$regArr,$regRange='',$getHtmlWay="curl",$output_encoding=false)
 		 {
 		 	
 			$this->output_encoding = $output_encoding;
@@ -63,7 +64,7 @@
 			 }
 			   
 		 }
-		 function setQuery($regArr,$regRange='')
+		public function setQuery($regArr,$regRange='')
 		 {
 			 $this->jsonArr=array();
 			 $this->regArr = $regArr;
@@ -142,7 +143,7 @@
 			   $this->jsonArr = $this->array_convert_encoding($this->jsonArr,$this->output_encoding,$this->html_encoding);
 		   }
 		 }	
-		 function getJSON()
+		public function getJSON()
 		 {
 			 return json_encode($this->jsonArr);
 		 } 
@@ -188,22 +189,3 @@
 		}
 		
 }
-  // $hj = new QueryList("http://www.baidu.com/s?rn=20&ie=utf-8&bs=love+me&f=8&rsv_bp=1&wd=%E4%B8%83%E9%87%8C%E9%A6%99&rsv_sug3=2&rsv_sug=0&rsv_sug1=2&rsv_sug4=111&inputT=2224",array("title"=>array("h3.t a","text"),"url"=>array("h3.t a","href"),"con"=>array("div.c-abstract","html")),"table.result");
-	//$hj=new QueryList("https://www.google.com.hk/search?filter=0&lr=&newwindow=1&safe=images&hl=en&as_qdr=all&q=QQ2014",array("hcon"=>array(".st","html")));
-	//  print_r($hj->getJSON());
-	 // print_r($hj->jsonArr);
-// $hj = new QueryList('https://www.google.com.hk/search?filter=0&lr=&newwindow=1&safe=images&hl=en&as_qdr=all&q=QQ2014',array("url"=>array("h3.r a","href")));
-// print_r($hj->jsonArr);
-// $hj->setQuery(array("hcon"=>array("span.st","text")));
-// print_r($hj->jsonArr);
-/*
-$ct = new QueryList("http://www.mianbao.com/cartoon/",array("title"=>array("a:eq(0)","text")),"ul.txt-list li","get");
-print_r($ct->jsonArr);*/
-
-/*$hj = new QueryList("http://t.sohu.com/jingxuan",array("con"=>array(".ugc","html")),"[id$=_con]","get","UTF-8");
-print_r($hj->jsonArr);*/
-
-/*$html = file_get_contents('http://www.baidu.com/s?rn=20&ie=utf-8&bs=love+me&f=8&rsv_bp=1&wd=%E4%B8%83%E9%87%8C%E9%A6%99&rsv_sug3=2&rsv_sug=0&rsv_sug1=2&rsv_sug4=111&inputT=2224');
-$hj = new QueryList($html,array("title"=>array("h3.t a","text"),"url"=>array("h3.t a","href"),"con"=>array("div.c-abstract","html")),"table.result");
-print_r($hj->jsonArr);*/
-?>
