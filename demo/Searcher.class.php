@@ -48,7 +48,7 @@ require '../QueryList.class.php';
                $reg_znum='/([\d,]+) result(s)?/';
                $getHtmlWay = 'curl';
            }
-           $searcherObj = new QueryList($url,$this->regArr,$this->regRange,$getHtmlWay,false);
+           $searcherObj = QueryList::Query($url,$this->regArr,$this->regRange,$getHtmlWay,false);
            for($i=0;$i<count($searcherObj->jsonArr);$i++)
            {
                if($this->searcher=='baidu')
