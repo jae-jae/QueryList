@@ -1,4 +1,22 @@
 <?php
+/**
+ * Searcher
+ *
+ * 一个基于QueryList的搜索引擎类
+ *
+ * @author      Jaeger
+ * @email       734708094@qq.com
+ * @link        http://git.oschina.net/jae/QueryList
+ * @version     1.5.0  
+ *
+ *@example 
+ *
+ $hj = Searcher::S('site:pan.baidu.com torrent','sogou',20,2);
+  print_r( $hj->jsonArr);
+
+ $json = Searcher::S('QueryList交流')->getJSON();
+  print_r($json);
+ */
 require '../QueryList.class.php';
    class Searcher
    {
@@ -10,8 +28,18 @@ require '../QueryList.class.php';
        private $regRange ;
        private $regZnum;
        public $jsonArr;
+       private static $s;
 
-       function Searcher($searcher,$key,$num,$page)
+       public static function S($key,$searcher = 'baidu',$num = 10,$page = 1)
+       {
+          if(!(self::$s instanceof self))
+          {
+            self::$s = new self();
+          }
+          self::$s->query($key,$searcher,$num,$page);
+          return self::$s;
+       }
+       private function query($key,$searcher,$num,$page)
        {
            if($searcher=='baidu')
            {
@@ -24,6 +52,12 @@ require '../QueryList.class.php';
                $this->regArr = array("title"=>array("h3.r a","text"),"tCon"=>array("span.st","text"),"url"=>array("h3.r a","href"));
                $this->regRange = 'li.g';
                $this->regZnum=array("zNum"=>array("div#resultStats","text"));
+           }
+           else if($searcher=='sogou')
+           {
+               $this->regArr = array("title"=>array("h3 a","text"),"tCon"=>array("div.ft","text"),"url"=>array("h3 a","href"));
+               $this->regRange = '[id^=rb_]';
+               $this->regZnum=array("zNum"=>array("div.mun","text"));
            }
            $this->searcher = $searcher;
            $this->key = $key;
@@ -48,6 +82,11 @@ require '../QueryList.class.php';
                $reg_znum='/([\d,]+) result(s)?/';
                $getHtmlWay = 'curl';
            }
+           else if($this->searcher=='sogou')
+           {
+              $url="http://www.sogou.com/web?query=$s&num=$num&page=".$this->page;
+              $reg_znum='/[\d,]+/';
+           }
            $searcherObj = QueryList::Query($url,$this->regArr,$this->regRange,$getHtmlWay,false);
            for($i=0;$i<count($searcherObj->jsonArr);$i++)
            {
@@ -62,8 +101,6 @@ require '../QueryList.class.php';
            }
            $this->jsonArr = $searcherObj->jsonArr ;
 
-
-
            //获取总共结果条数
 
            $searcherObj->setQuery($this->regZnum);
@@ -76,7 +113,7 @@ require '../QueryList.class.php';
 
 
        }
-       function getJSON()
+      public function getJSON()
        {
            return json_encode($this->jsonArr);
        }
@@ -109,5 +146,5 @@ require '../QueryList.class.php';
        }
    }
    
-$hj = new Searcher('baidu','site:pan.baidu.com torrent',20,2);
- print_r( $hj->jsonArr);
+
+ 
