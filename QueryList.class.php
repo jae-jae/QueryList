@@ -7,7 +7,7 @@
  * @author 			Jaeger
  * @email 			734708094@qq.com
  * @link            http://git.oschina.net/jae/QueryList
- * @version         2.0.0     
+ * @version         2.1.0     
  *
  * @example 
  *
@@ -15,12 +15,25 @@
 $hj = QueryList::Query('http://mobile.csdn.net/',array("title"=>array('.unit h1','text')));
 print_r($hj->jsonArr);
 
+//回调函数1
+function callfun1($content,$key)
+{
+    return '回调函数1：'.$key.'-'.$content;
+}
+class HJ{
+    //回调函数2
+    static public function callfun2($content,$key)
+    {
+        return '回调函数2：'.$key.'-'.$content;
+    }
+}
 //获取CSDN文章页下面的文章标题和内容
 $url = 'http://www.csdn.net/article/2014-06-05/2820091-build-or-buy-a-mobile-game-backend';
 $reg = array(
-    'title'=>array('h1','text'),    //获取纯文本格式的标题                   
-    'summary'=>array('.summary','text','input strong'), //获取纯文本的文章摘要，但保留input和strong标签
-    'content'=>array('.news_content','html','div a')    //获取html格式的文章内容，但过滤掉div和a标签
+    'title'=>array('h1','text','','callfun1'),    //获取纯文本格式的标题,并调用回调函数1                   
+    'summary'=>array('.summary','text','-input strong'), //获取纯文本的文章摘要，但保strong标签并去除input标签
+    'content'=>array('.news_content','html','div a -.copyright'),    //获取html格式的文章内容，但过滤掉div和a标签,去除类名为copyright的元素
+    'callback'=>array('HJ','callfun2')      //调用回调函数2作为全局回调函数
     );
 $rang = '.left';
 $hj = QueryList::Query($url,$reg,$rang,'curl');
@@ -30,6 +43,7 @@ print_r($hj->jsonArr);
 $hj->setQuery(array('title'=>array('','text'),'url'=>array('a','href')),'#con_two_2 li');
 //输出json数据
 echo $hj->getJson();
+ 
  */
 require 'phpQuery/phpQuery.php';
 class QueryList
@@ -44,7 +58,12 @@ class QueryList
     /**
      * 静态方法，访问入口
      * @param string $page            要抓取的网页URL地址(支持https);或者是html源代码
-     * @param array  $regArr         【选择器数组】说明：格式array("名称"=>array("选择器","类型"[,"标签列表"]),.......),【类型】说明：值 "text" ,"html" ,"属性" ,【标签列表】:可选，当【类型】值为text时表示需要保留的HTML标签，为html时表示要过滤掉的HTML标签
+     * @param array  $regArr         【选择器数组】说明：格式array("名称"=>array("选择器","类型"[,"标签过滤列表"][,"回调函数"]),.......[,"callback"=>"全局回调函数"]);
+     *                               【选择器】说明:可以为任意的jQuery选择器语法
+     *                               【类型】说明：值 "text" ,"html" ,"HTML标签属性" ,
+     *                               【标签过滤列表】:可选，当标签名前面添加减号(-)时（此时标签可以为任意的元素选择器），表示移除该标签以及标签内容，否则当【类型】值为text时表示需要保留的HTML标签，为html时表示要过滤掉的HTML标签
+     *                               【回调函数】/【全局回调函数】：可选，字符串（函数名） 或 数组（array("类名","类的静态方法")），回调函数应有俩个参数，第一个参数是选择到的内容，第二个参数是选择器数组下标，回调函数会覆盖全局回调函数
+     *
      * @param string $regRange       【块选择器】：指 先按照规则 选出 几个大块 ，然后再分别再在块里面 进行相关的选择
      * @param string $getHtmlWay     【源码获取方式】指是通过curl抓取源码，还是通过file_get_contents抓取源码
      * @param string $outputEncoding【输出编码格式】指要以什么编码输出(UTF-8,GB2312,.....)，防止出现乱码,如果设置为 假值 则不改变原字符串编码
@@ -100,6 +119,7 @@ class QueryList
         }
         //获取编码格式
         $this->htmlEncoding = $this->_getEncode($this->html);
+        $this->html = $this->_removeTags($this->html,array('script','style'));
         if (!empty($regArr)) {
             $this->regArr = $regArr;
             $this->regRange = $regRange;
@@ -114,8 +134,10 @@ class QueryList
             $i = 0;
             foreach ($robj as $item) {
                 while (list($key, $reg_value) = each($this->regArr)) {
+                    if($key=='callback')continue;
                     $tags = isset($reg_value[2])?$reg_value[2]:'';
                     $iobj = pq($item)->find($reg_value[0]);
+
                     switch ($reg_value[1]) {
                     case 'text':
                         $this->jsonArr[$i][$key] = $this->_allowTags(pq($iobj)->html(),$tags);
@@ -127,6 +149,12 @@ class QueryList
                         $this->jsonArr[$i][$key] = pq($iobj)->attr($reg_value[1]);
                         break;
                     }
+
+                    if(isset($reg_value[3])){
+                        $this->jsonArr[$i][$key] = call_user_func($reg_value[3],$this->jsonArr[$i][$key],$key);
+                    }else if(isset($this->regArr['callback'])){
+                        $this->jsonArr[$i][$key] = call_user_func($this->regArr['callback'],$this->jsonArr[$i][$key],$key);
+                    }
                 }
                 //重置数组指针
                 reset($this->regArr);
@@ -134,21 +162,30 @@ class QueryList
             }
         } else {
             while (list($key, $reg_value) = each($this->regArr)) {
+                if($key=='callback')continue;
                 $tags = isset($reg_value[2])?$reg_value[2]:'';
                 $lobj = pq($hobj)->find($reg_value[0]);
                 $i = 0;
                 foreach ($lobj as $item) {
                     switch ($reg_value[1]) {
                     case 'text':
-                        $this->jsonArr[$i++][$key] = $this->_allowTags(pq($item)->html(),$tags);
+                        $this->jsonArr[$i][$key] = $this->_allowTags(pq($item)->html(),$tags);
                         break;
                     case 'html':
-                        $this->jsonArr[$i++][$key] = $this->_stripTags(pq($item)->html(),$tags);
+                        $this->jsonArr[$i][$key] = $this->_stripTags(pq($item)->html(),$tags);
                         break;
                     default:
-                        $this->jsonArr[$i++][$key] = pq($item)->attr($reg_value[1]);
+                        $this->jsonArr[$i][$key] = pq($item)->attr($reg_value[1]);
                         break;
                     }
+
+                    if(isset($reg_value[3])){
+                        $this->jsonArr[$i][$key] = call_user_func($reg_value[3],$this->jsonArr[$i][$key],$key);
+                    }else if(isset($this->regArr['callback'])){
+                        $this->jsonArr[$i][$key] = call_user_func($this->regArr['callback'],$this->jsonArr[$i][$key],$key);
+                    }
+
+                    $i++;
                 }
             }
         }
@@ -202,14 +239,15 @@ class QueryList
     /**
      * 去除特定的html标签
      * @param  string $html 
-     * @param  string $tags 多个标签名之间用空格隔开
+     * @param  string $tags_str 多个标签名之间用空格隔开
      * @return string       
      */
-    private function _stripTags($html,$tags)
+    private function _stripTags($html,$tags_str)
     {
-        $tagsArr = preg_split("/\s+/",$tags,-1,PREG_SPLIT_NO_EMPTY);
+        $tagsArr = $this->_tag($tags_str);
+        $html = $this->_removeTags($html,$tagsArr[1]);
         $p = array();
-        foreach ($tagsArr as $tag) {  
+        foreach ($tagsArr[0] as $tag) {  
             $p[]="/(<(?:\/".$tag."|".$tag.")[^>]*>)/i";  
         }  
         $html = preg_replace($p,"",trim($html));  
@@ -218,17 +256,51 @@ class QueryList
     /**
      * 保留特定的html标签
      * @param  string $html 
-     * @param  string $tags 多个标签名之间用空格隔开
+     * @param  string $tags_str 多个标签名之间用空格隔开
      * @return string       
      */
-    private function _allowTags($html,$tags)
+    private function _allowTags($html,$tags_str)
     {
-        $tagsArr = preg_split("/\s+/",$tags,-1,PREG_SPLIT_NO_EMPTY);
+        $tagsArr = $this->_tag($tags_str);
+        $html = $this->_removeTags($html,$tagsArr[1]);
         $allow = '';
-        foreach ($tagsArr as $tag) {
+        foreach ($tagsArr[0] as $tag) {
             $allow .= "<$tag> ";
         }
         return strip_tags(trim($html),$allow);
     }
+    private function _tag($tags_str)
+    {
+        $tagArr = preg_split("/\s+/",$tags_str,-1,PREG_SPLIT_NO_EMPTY);
+        $tags = array(array(),array());
+        foreach($tagArr as $tag)
+        {
+            if(preg_match('/-(.+)/', $tag,$arr))
+            {
+                array_push($tags[1], $arr[1]);
+            }else{
+                array_push($tags[0], $tag);
+            }
+        }
+        return $tags;
+    }
+    /**
+     * 移除特定的html标签
+     * @param  string $html 
+     * @param  array  $tags 标签数组    
+     * @return string       
+     */
+    private function _removeTags($html,$tags)
+    {
+        $tag_str = '';
+        foreach ($tags as $tag) {
+            $tag_str .= $tag_str?','.$tag:$tag;
+        }
+        $doc = phpQuery::newDocumentHTML($html);
+        pq($doc)->find($tag_str)->remove();
+        return pq($doc)->htmlOuter();
+    }
 }
+
+
 

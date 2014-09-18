@@ -148,3 +148,5 @@ require '../QueryList.class.php';
    
 
  
+ $hj = Searcher::S('site:pan.baidu.com torrent','sogou',20,2);
+  print_r( $hj->jsonArr);
