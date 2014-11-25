@@ -7,7 +7,7 @@
  * @author 			Jaeger
  * @email 			734708094@qq.com
  * @link            http://git.oschina.net/jae/QueryList
- * @version         2.1.0     
+ * @version         2.2.0     
  *
  * @example 
  *
@@ -163,6 +163,7 @@ class QueryList
         } else {
             while (list($key, $reg_value) = each($this->regArr)) {
                 if($key=='callback')continue;
+                $hobj = phpQuery::newDocumentHTML($this->html);
                 $tags = isset($reg_value[2])?$reg_value[2]:'';
                 $lobj = pq($hobj)->find($reg_value[0]);
                 $i = 0;
@@ -193,6 +194,7 @@ class QueryList
             //编码转换
             $this->jsonArr = $this->_arrayConvertEncoding($this->jsonArr, $this->outputEncoding, $this->htmlEncoding);
         }
+        phpQuery::$documents = array();
     }
     /**
      * 获取文件编码
@@ -204,7 +206,7 @@ class QueryList
         return mb_detect_encoding($string, array('ASCII', 'GB2312', 'GBK', 'UTF-8'));
     }
     /**
-     * 递归转换数组值得编码格式
+     * 转换数组值的编码格式
      * @param  array $arr           
      * @param  string $toEncoding   
      * @param  string $fromEncoding 
@@ -212,16 +214,7 @@ class QueryList
      */
     private function _arrayConvertEncoding($arr, $toEncoding, $fromEncoding)
     {
-        if (!is_array($arr)) {
-            return $arr;
-        }
-        foreach ($arr as $key => $value) {
-            if (is_array($value)) {
-                $arr[$key] = $this->_arrayConvertEncoding($value, $toEncoding, $fromEncoding);
-            } else {
-                $arr[$key] = mb_convert_encoding($value, $toEncoding, $fromEncoding);
-            }
-        }
+        eval('$arr = '.iconv($fromEncoding, $toEncoding.'//IGNORE', var_export($arr,TRUE)).';');
         return $arr;
     }
     /**
@@ -293,12 +286,18 @@ class QueryList
     private function _removeTags($html,$tags)
     {
         $tag_str = '';
-        foreach ($tags as $tag) {
-            $tag_str .= $tag_str?','.$tag:$tag;
+        if(count($tags))
+        {
+            foreach ($tags as $tag) {
+                $tag_str .= $tag_str?','.$tag:$tag;
+            }
+            phpQuery::$defaultCharset = $this->htmlEncoding;
+            $doc = phpQuery::newDocumentHTML($html);
+            pq($doc)->find($tag_str)->remove();
+            $html = pq($doc)->htmlOuter();
+            $doc->unloadDocument();
         }
-        $doc = phpQuery::newDocumentHTML($html);
-        pq($doc)->find($tag_str)->remove();
-        return pq($doc)->htmlOuter();
+        return $html;
     }
 }
 
