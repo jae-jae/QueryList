@@ -7,7 +7,7 @@
  * @author 			Jaeger
  * @email 			734708094@qq.com
  * @link            http://git.oschina.net/jae/QueryList
- * @version         2.2.0     
+ * @version         2.2.1     
  *
  * @example 
  *
@@ -55,6 +55,8 @@ class QueryList
     private $outputEncoding;
     private $htmlEncoding;
     private static $ql;
+    private function __construct() {
+    }
     /**
      * 静态方法，访问入口
      * @param string $page            要抓取的网页URL地址(支持https);或者是html源代码
@@ -119,7 +121,7 @@ class QueryList
         }
         //获取编码格式
         $this->htmlEncoding = $this->_getEncode($this->html);
-        $this->html = $this->_removeTags($this->html,array('script','style'));
+        // $this->html = $this->_removeTags($this->html,array('script','style'));
         if (!empty($regArr)) {
             $this->regArr = $regArr;
             $this->regRange = $regRange;
