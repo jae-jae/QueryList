@@ -7,13 +7,13 @@
  * @author 			Jaeger
  * @email 			734708094@qq.com
  * @link            http://git.oschina.net/jae/QueryList
- * @version         2.2.1     
+ * @version         3.0
  *
  * @example 
  *
  //获取CSDN移动开发栏目下的文章列表标题
 $hj = QueryList::Query('http://mobile.csdn.net/',array("title"=>array('.unit h1','text')));
-print_r($hj->jsonArr);
+print_r($hj->data);
 
 //回调函数1
 function callfun1($content,$key)
@@ -36,26 +36,29 @@ $reg = array(
     'callback'=>array('HJ','callfun2')      //调用回调函数2作为全局回调函数
     );
 $rang = '.left';
-$hj = QueryList::Query($url,$reg,$rang,'curl');
-print_r($hj->jsonArr);
+$hj = QueryList::Query($url,$reg,$rang);
+print_r($hj->data);
 
 //继续获取右边相关热门文章列表的标题以及链接地址
 $hj->setQuery(array('title'=>array('','text'),'url'=>array('a','href')),'#con_two_2 li');
-//输出json数据
-echo $hj->getJson();
+//输出数据
+echo $hj->getData();
  
  */
 require 'phpQuery/phpQuery.php';
 class QueryList
 {
     private $regArr;
-    public $jsonArr;
+    public $data;
     private $regRange;
-    private $html;
-    private $outputEncoding;
+    public $html;
+    private $pqHtml;
+    private $outputEncoding = false;
+    private $inputEncoding = false;
     private $htmlEncoding;
-    private static $ql;
-    private function __construct() {
+    public static $instances;
+
+    public function __construct() {
     }
     /**
      * 静态方法，访问入口
@@ -67,72 +70,114 @@ class QueryList
      *                               【回调函数】/【全局回调函数】：可选，字符串（函数名） 或 数组（array("类名","类的静态方法")），回调函数应有俩个参数，第一个参数是选择到的内容，第二个参数是选择器数组下标，回调函数会覆盖全局回调函数
      *
      * @param string $regRange       【块选择器】：指 先按照规则 选出 几个大块 ，然后再分别再在块里面 进行相关的选择
-     * @param string $getHtmlWay     【源码获取方式】指是通过curl抓取源码，还是通过file_get_contents抓取源码
      * @param string $outputEncoding【输出编码格式】指要以什么编码输出(UTF-8,GB2312,.....)，防止出现乱码,如果设置为 假值 则不改变原字符串编码
+     * @param string $inputEncoding 【输入编码格式】明确指定输入的页面编码格式(UTF-8,GB2312,.....)，防止出现乱码,如果设置为 假值 则自动识别
+     * @param bool|false $removeHead 【是否移除页面头部区域】 乱码终极解决方案
+     * @return mixed
      */
-    public static function Query($page, $regArr, $regRange = '', $getHtmlWay = 'curl', $outputEncoding = false)
+    public static function Query($page,array $regArr, $regRange = '', $outputEncoding = null, $inputEncoding = null,$removeHead = false)
     {
-        if(!(self::$ql instanceof self))
-        {
-            self::$ql = new self();
-        }
-        self::$ql->_query($page, $regArr, $regRange, $getHtmlWay, $outputEncoding);
-        return self::$ql;
+        return  self::getInstance()->_query($page, $regArr, $regRange, $outputEncoding, $inputEncoding,$removeHead);
     }
+
+    /**
+     * 运行QueryList扩展
+     * @param $class
+     * @param array $args
+     * @return mixed
+     * @throws QueryList_Exception
+     */
+    public static function run($class,$args = array())
+    {
+        $extension = self::getInstance($class);
+        return $extension->run($args);
+    }
+
+    /**
+     * 获取任意实例
+     * @return mixed
+     * @throws QueryList_Exception
+     */
+    public static function getInstance()
+    {
+        $args = func_get_args();
+        count($args) || $args = array(self::class);
+        $key = md5(serialize($args));
+        $className = array_shift($args);
+       if(!class_exists($className)) {
+           throw new QueryList_Exception("no class {$className}");
+       }
+       if(!isset(self::$instances[$key])) {
+            $rc = new ReflectionClass($className);
+           self::$instances[$key] =  $rc->newInstanceArgs($args);
+       }
+       return self::$instances[$key];
+    }
+
+    /**
+     * 获取目标页面源码(主要用于调试)
+     * @param bool|true $rel
+     * @return string
+     */
+    public  function getHtml($rel = true)
+    {
+        return $rel?$this->qpHtml:$this->html;
+    }
+
+    /**
+     * 获取采集结果数据
+     * @param callback $callback
+     * @return array
+     */
+    public function getData($callback = null)
+    {
+        if(is_callable($callback)){
+            return array_map($callback,$this->data);
+        }
+        return $this->data;
+    }
+
     /**
      * 重新设置选择器
-     * @param array $regArr   选择器数组
-     * @param string $regRange 块选择器
+     * @param $regArr
+     * @param string $regRange
+     * @param string $outputEncoding
+     * @param string $inputEncoding
+     * @param bool|false $removeHead
+     * @return QueryList
      */
-    public function setQuery($regArr, $regRange = '')
+    public function setQuery(array $regArr, $regRange = '',$outputEncoding = null, $inputEncoding = null,$removeHead = false)
     {
-        $this->jsonArr = array();
+        return $this->_query($this->html,$regArr, $regRange, $outputEncoding, $inputEncoding,$removeHead);
+    }
+
+    private function _query($page,array $regArr, $regRange, $outputEncoding, $inputEncoding,$removeHead)
+    {
+        $this->data = array();
+        $this->html = $this->_isURL($page)?$this->_request($page):$page;
+        $outputEncoding && $this->outputEncoding = $outputEncoding;
+        $inputEncoding && $this->inputEncoding = $inputEncoding;
+        $removeHead && $this->html = $this->_removeHead($this->html);
+        $this->pqHtml = '';
+        if(empty($this->html)){
+            trigger_error("The received content is empty!",E_USER_NOTICE);
+        }
+        //获取编码格式
+        $this->htmlEncoding = $this->inputEncoding?$this->inputEncoding:$this->_getEncode($this->html);
+        // $this->html = $this->_removeTags($this->html,array('script','style'));
         $this->regArr = $regArr;
         $this->regRange = $regRange;
         $this->_getList();
+        return $this;
     }
-    /**
-     * 得到JSON结构的结果
-     * @return string
-     */
-    public function getJSON()
-    {
-        return json_encode($this->jsonArr);
-    }
-    private function _query($page, $regArr, $regRange, $getHtmlWay, $outputEncoding)
-    {
-        $this->jsonArr = array();
-        $this->outputEncoding = $outputEncoding;
-        if ($this->_isURL($page)) {
-            if ($getHtmlWay == 'curl') {
-                //为了能获取https://
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $page);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                $this->html = curl_exec($ch);
-                curl_close($ch);
-            } else {
-                $this->html = file_get_contents($page);
-            }
-        } else {
-            $this->html = $page;
-        }
-        //获取编码格式
-        $this->htmlEncoding = $this->_getEncode($this->html);
-        // $this->html = $this->_removeTags($this->html,array('script','style'));
-        if (!empty($regArr)) {
-            $this->regArr = $regArr;
-            $this->regRange = $regRange;
-            $this->_getList();
-        }
-    }
+
     private function _getList()
     {
-        $hobj = phpQuery::newDocumentHTML($this->html);
+        $this->inputEncoding && phpQuery::$defaultCharset = $this->inputEncoding;
+        $document = phpQuery::newDocumentHTML($this->html);
+        $this->qpHtml = $document->htmlOuter();
         if (!empty($this->regRange)) {
-            $robj = pq($hobj)->find($this->regRange);
+            $robj = pq($document)->find($this->regRange);
             $i = 0;
             foreach ($robj as $item) {
                 while (list($key, $reg_value) = each($this->regArr)) {
@@ -142,20 +187,20 @@ class QueryList
 
                     switch ($reg_value[1]) {
                     case 'text':
-                        $this->jsonArr[$i][$key] = $this->_allowTags(pq($iobj)->html(),$tags);
+                        $this->data[$i][$key] = $this->_allowTags(pq($iobj)->html(),$tags);
                         break;
                     case 'html':
-                        $this->jsonArr[$i][$key] = $this->_stripTags(pq($iobj)->html(),$tags);
+                        $this->data[$i][$key] = $this->_stripTags(pq($iobj)->html(),$tags);
                         break;
                     default:
-                        $this->jsonArr[$i][$key] = pq($iobj)->attr($reg_value[1]);
+                        $this->data[$i][$key] = pq($iobj)->attr($reg_value[1]);
                         break;
                     }
 
                     if(isset($reg_value[3])){
-                        $this->jsonArr[$i][$key] = call_user_func($reg_value[3],$this->jsonArr[$i][$key],$key);
+                        $this->data[$i][$key] = call_user_func($reg_value[3],$this->data[$i][$key],$key);
                     }else if(isset($this->regArr['callback'])){
-                        $this->jsonArr[$i][$key] = call_user_func($this->regArr['callback'],$this->jsonArr[$i][$key],$key);
+                        $this->data[$i][$key] = call_user_func($this->regArr['callback'],$this->data[$i][$key],$key);
                     }
                 }
                 //重置数组指针
@@ -165,27 +210,27 @@ class QueryList
         } else {
             while (list($key, $reg_value) = each($this->regArr)) {
                 if($key=='callback')continue;
-                $hobj = phpQuery::newDocumentHTML($this->html);
+                $document = phpQuery::newDocumentHTML($this->html);
                 $tags = isset($reg_value[2])?$reg_value[2]:'';
-                $lobj = pq($hobj)->find($reg_value[0]);
+                $lobj = pq($document)->find($reg_value[0]);
                 $i = 0;
                 foreach ($lobj as $item) {
                     switch ($reg_value[1]) {
                     case 'text':
-                        $this->jsonArr[$i][$key] = $this->_allowTags(pq($item)->html(),$tags);
+                        $this->data[$i][$key] = $this->_allowTags(pq($item)->html(),$tags);
                         break;
                     case 'html':
-                        $this->jsonArr[$i][$key] = $this->_stripTags(pq($item)->html(),$tags);
+                        $this->data[$i][$key] = $this->_stripTags(pq($item)->html(),$tags);
                         break;
                     default:
-                        $this->jsonArr[$i][$key] = pq($item)->attr($reg_value[1]);
+                        $this->data[$i][$key] = pq($item)->attr($reg_value[1]);
                         break;
                     }
 
                     if(isset($reg_value[3])){
-                        $this->jsonArr[$i][$key] = call_user_func($reg_value[3],$this->jsonArr[$i][$key],$key);
+                        $this->data[$i][$key] = call_user_func($reg_value[3],$this->data[$i][$key],$key);
                     }else if(isset($this->regArr['callback'])){
-                        $this->jsonArr[$i][$key] = call_user_func($this->regArr['callback'],$this->jsonArr[$i][$key],$key);
+                        $this->data[$i][$key] = call_user_func($this->regArr['callback'],$this->data[$i][$key],$key);
                     }
 
                     $i++;
@@ -194,10 +239,52 @@ class QueryList
         }
         if ($this->outputEncoding) {
             //编码转换
-            $this->jsonArr = $this->_arrayConvertEncoding($this->jsonArr, $this->outputEncoding, $this->htmlEncoding);
+            $this->data = $this->_arrayConvertEncoding($this->data, $this->outputEncoding, $this->htmlEncoding);
         }
         phpQuery::$documents = array();
     }
+
+    /**
+     * URL请求
+     * @param $url
+     * @return string
+     */
+    private function _request($url)
+    {
+        if(function_exists('curl_init')){
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+            curl_setopt($ch, CURLOPT_REFERER, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            curl_close($ch);
+        }elseif(version_compare(PHP_VERSION, '5.0.0')>=0){
+            $opts = array(
+                'http' => array(
+                    'header' => "Referer:{$url}"
+                )
+            );
+            $result = file_get_contents($url,false,stream_context_create($opts));
+        }else{
+            $result = file_get_contents($url);
+        }
+        return $result;
+    }
+
+    /**
+     * 移除页面head区域代码
+     * @param $html
+     * @return mixed
+     */
+    private function _removeHead($html)
+    {
+        return preg_replace('/<head.+?>.+<\/head>/is','<head></head>',$html);
+    }
+
     /**
      * 获取文件编码
      * @param $string
@@ -207,6 +294,7 @@ class QueryList
     {
         return mb_detect_encoding($string, array('ASCII', 'GB2312', 'GBK', 'UTF-8'));
     }
+
     /**
      * 转换数组值的编码格式
      * @param  array $arr           
@@ -219,6 +307,7 @@ class QueryList
         eval('$arr = '.iconv($fromEncoding, $toEncoding.'//IGNORE', var_export($arr,TRUE)).';');
         return $arr;
     }
+
     /**
      * 简单的判断一下参数是否为一个URL链接
      * @param  string  $str 
@@ -231,6 +320,7 @@ class QueryList
         }
         return false;
     }
+
     /**
      * 去除特定的html标签
      * @param  string $html 
@@ -248,6 +338,7 @@ class QueryList
         $html = preg_replace($p,"",trim($html));  
         return $html;  
     }
+
     /**
      * 保留特定的html标签
      * @param  string $html 
@@ -264,6 +355,7 @@ class QueryList
         }
         return strip_tags(trim($html),$allow);
     }
+
     private function _tag($tags_str)
     {
         $tagArr = preg_split("/\s+/",$tags_str,-1,PREG_SPLIT_NO_EMPTY);
@@ -279,6 +371,7 @@ class QueryList
         }
         return $tags;
     }
+
     /**
      * 移除特定的html标签
      * @param  string $html 
@@ -293,7 +386,7 @@ class QueryList
             foreach ($tags as $tag) {
                 $tag_str .= $tag_str?','.$tag:$tag;
             }
-            phpQuery::$defaultCharset = $this->htmlEncoding;
+            phpQuery::$defaultCharset = $this->inputEncoding?$this->inputEncoding:$this->htmlEncoding;
             $doc = phpQuery::newDocumentHTML($html);
             pq($doc)->find($tag_str)->remove();
             $html = pq($doc)->htmlOuter();
@@ -303,5 +396,27 @@ class QueryList
     }
 }
 
+class QueryList_Exception extends Exception{
 
+}
+
+class Autoload
+{
+    public static function load($className)
+    {
+        $files = array(
+            sprintf('%s/extensions/%s.php',__DIR__,$className),
+            sprintf('%s/extensions/vendors/%s.php',__DIR__,$className)
+        );
+        foreach ($files as $file) {
+            if(is_file($file)){
+                require $file;
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+spl_autoload_register(array('Autoload','load'));
 
