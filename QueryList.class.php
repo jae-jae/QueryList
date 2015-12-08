@@ -7,7 +7,7 @@
  * @author 			Jaeger
  * @email 			734708094@qq.com
  * @link            http://git.oschina.net/jae/QueryList
- * @version         3.0
+ * @version         3.0.1
  *
  * @example 
  *
@@ -101,7 +101,7 @@ class QueryList
     public static function getInstance()
     {
         $args = func_get_args();
-        count($args) || $args = array(self::class);
+        count($args) || $args = array('QueryList');
         $key = md5(serialize($args));
         $className = array_shift($args);
        if(!class_exists($className)) {
