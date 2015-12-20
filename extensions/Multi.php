@@ -9,7 +9,7 @@
  */
 class Multi extends AQuery
 {
-    private $curl;
+    public $curl;
     private $args;
 
     public function run(array $args)
