@@ -1,0 +1,17 @@
+{
+    "name": "jaeger/querylist",
+    "description": "QueryList是基于phpQuery的无比强大的PHP采集工具",
+    "require": {
+        "PHP":">=5.3.0",
+        "jaeger/phpquery-single": "^0.9.5",
+        "jaeger/curlmulti":"^1.0",
+        "jaeger/http":"^0.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jaeger",
+            "email": "hj.q@qq.com"
+        }
+    ]
+}
