@@ -1,4 +1,9 @@
 <?php
+
+namespace QL;
+
+use phpQuery,Exception;
+
 /**
  * QueryList
  *
@@ -45,7 +50,7 @@ $hj->setQuery(array('title'=>array('','text'),'url'=>array('a','href')),'#con_tw
 echo $hj->getData();
  
  */
-namespace QueryList;
+
 class QueryList
 {
     private $regArr;
@@ -105,7 +110,7 @@ class QueryList
         $key = md5(serialize($args));
         $className = array_shift($args);
        if(!class_exists($className)) {
-           throw new \Exception("no class {$className}");
+           throw new Exception("no class {$className}");
        }
        if(!isset(self::$instances[$key])) {
             $rc = new \ReflectionClass($className);
@@ -173,8 +178,8 @@ class QueryList
 
     private function _getList()
     {
-        $this->inputEncoding && \phpQuery::$defaultCharset = $this->inputEncoding;
-        $document = \phpQuery::newDocumentHTML($this->html);
+        $this->inputEncoding && phpQuery::$defaultCharset = $this->inputEncoding;
+        $document = phpQuery::newDocumentHTML($this->html);
         $this->qpHtml = $document->htmlOuter();
         if (!empty($this->regRange)) {
             $robj = pq($document)->find($this->regRange);
@@ -210,7 +215,7 @@ class QueryList
         } else {
             while (list($key, $reg_value) = each($this->regArr)) {
                 if($key=='callback')continue;
-                $document = \phpQuery::newDocumentHTML($this->html);
+                $document = phpQuery::newDocumentHTML($this->html);
                 $tags = isset($reg_value[2])?$reg_value[2]:'';
                 $lobj = pq($document)->find($reg_value[0]);
                 $i = 0;
@@ -241,7 +246,7 @@ class QueryList
             //编码转换
             $this->data = $this->_arrayConvertEncoding($this->data, $this->outputEncoding, $this->htmlEncoding);
         }
-        \phpQuery::$documents = array();
+        phpQuery::$documents = array();
     }
 
     /**
@@ -386,8 +391,8 @@ class QueryList
             foreach ($tags as $tag) {
                 $tag_str .= $tag_str?','.$tag:$tag;
             }
-            \phpQuery::$defaultCharset = $this->inputEncoding?$this->inputEncoding:$this->htmlEncoding;
-            $doc = \phpQuery::newDocumentHTML($html);
+            phpQuery::$defaultCharset = $this->inputEncoding?$this->inputEncoding:$this->htmlEncoding;
+            $doc = phpQuery::newDocumentHTML($html);
             pq($doc)->find($tag_str)->remove();
             $html = pq($doc)->htmlOuter();
             $doc->unloadDocument();

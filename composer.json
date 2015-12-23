@@ -4,9 +4,9 @@
     "require": {
         "PHP":">=5.3.0",
         "jaeger/phpquery-single": "^0.9.5",
-        "jaeger/querylist-ext-aquery":"*",
-        "jaeger/curlmulti":"^1.0",
-        "jaeger/http":"^0.1"
+        "jaeger/querylist-ext-aquery":"dev-master",
+        "jaeger/curlmulti":"dev-master",
+        "jaeger/http":"dev-master"
     },
     "license": "MIT",
     "authors": [
@@ -17,7 +17,7 @@
     ],
     "autoload":{
         "psr-4":{
-            "QueryList\\":""
+            "QL\\":""
         }
     }
 }
