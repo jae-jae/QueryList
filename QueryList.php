@@ -2,7 +2,7 @@
 
 namespace QL;
 
-use phpQuery,Exception;
+use phpQuery,Exception,ReflectionClass;
 
 /**
  * QueryList
@@ -94,7 +94,7 @@ class QueryList
      */
     public static function run($class,$args = array())
     {
-        $extension = self::getInstance($class);
+        $extension = self::getInstance("QL\\Ext\\{$class}");
         return $extension->run($args);
     }
 
@@ -113,7 +113,7 @@ class QueryList
            throw new Exception("no class {$className}");
        }
        if(!isset(self::$instances[$key])) {
-            $rc = new \ReflectionClass($className);
+            $rc = new ReflectionClass($className);
            self::$instances[$key] =  $rc->newInstanceArgs($args);
        }
        return self::$instances[$key];
