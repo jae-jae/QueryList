@@ -3,7 +3,8 @@
     "description": "QueryList是基于phpQuery的无比强大的PHP采集工具",
     "require": {
         "PHP":">=5.3.0",
-        "jaeger/phpquery-single": "^0.9.5"
+        "jaeger/phpquery-single": "^0.9.5",
+        "jaeger/querylist-ext-request": "^1.0"
     },
     "license": "MIT",
     "authors": [
