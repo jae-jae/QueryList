@@ -5,7 +5,8 @@
     "homepage": "http://querylist.cc",
     "require": {
         "PHP":">=5.3.0",
-        "jaeger/phpquery-single": "^0.9.5"
+        "jaeger/phpquery-single": "^0.9.5",
+        "jaeger/querylist-ext-request": "^1.0"
     },
     "license": "MIT",
     "authors": [
