@@ -263,6 +263,7 @@ class QueryList
             curl_setopt($ch, CURLOPT_AUTOREFERER, true);
             curl_setopt($ch, CURLOPT_REFERER, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36');
             $result = curl_exec($ch);
             curl_close($ch);
         }elseif(version_compare(PHP_VERSION, '5.0.0')>=0){
