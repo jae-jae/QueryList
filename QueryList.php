@@ -3,6 +3,8 @@
 namespace QL;
 
 use phpQuery,Exception,ReflectionClass;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 /**
  * QueryList
@@ -55,10 +57,12 @@ class QueryList
 {
     public $data;
     public $html;
+    private $page;
     private $pqHtml;
     private $outputEncoding = false;
     private $inputEncoding = false;
     private $htmlEncoding;
+    public static $logger = null;
     public static $instances;
 
     public function __construct() {
@@ -94,6 +98,27 @@ class QueryList
     {
         $extension = self::getInstance("QL\\Ext\\{$class}");
         return $extension->run($args);
+    }
+
+    /**
+     * 日志设置
+     * @param $handler
+     */
+    public static function setLog($handler)
+    {
+    	if(class_exists(Logger::class))
+    	{
+    		if(is_string($handler))
+    		{
+    		    $handler = new StreamHandler($handler,Logger::INFO);
+    		}
+    		self::$logger = new Logger('QueryList');
+    		self::$logger->pushHandler($handler);
+    	}else{
+    		throw new Exception("You need to install the package [monolog/monolog]");
+    		
+    	}
+        
     }
 
     /**
@@ -157,13 +182,15 @@ class QueryList
     private function _query($page,array $rules, $range, $outputEncoding, $inputEncoding,$removeHead)
     {
         $this->data = array();
-        $this->html = $this->_isURL($page)?$this->_request($page):$page;
+        $this->page = $page;
+        $this->html = $this->_isURL($this->page)?$this->_request($this->page):$this->page;
         $outputEncoding && $this->outputEncoding = $outputEncoding;
         $inputEncoding && $this->inputEncoding = $inputEncoding;
         $removeHead && $this->html = $this->_removeHead($this->html);
         $this->pqHtml = '';
         if(empty($this->html)){
-            trigger_error("The received content is empty!",E_USER_NOTICE);
+            $this->_log('The received content is empty!','error');
+            trigger_error('The received content is empty!',E_USER_NOTICE);
         }
         //获取编码格式
         $this->htmlEncoding = $this->inputEncoding?$this->inputEncoding:$this->_getEncode($this->html);
@@ -171,6 +198,7 @@ class QueryList
         $this->regArr = $rules;
         $this->regRange = $range;
         $this->_getList();
+        $this->_log();
         return $this;
     }
 
@@ -397,6 +425,26 @@ class QueryList
             $doc->unloadDocument();
         }
         return $html;
+    }
+
+    /**
+     * 打印日志
+     * @param string $message
+     * @param string $level
+     */
+    private function _log($message = '',$level = 'info')
+    {
+        if(!is_null(self::$logger))
+        {
+            $url = $this->_isURL($this->page)?$this->page:'[html]';
+            $count = count($this->data);
+            $level = empty($level)?($count?'info':'warning'):$level;
+            $message = empty($message)?($count?'Get data successfully':'Get data failed'):$message;
+            self::$logger->$level($message,array(
+                'page' => $url,
+                'count' => $count
+            ));
+        }
     }
 }
 
