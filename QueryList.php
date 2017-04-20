@@ -106,12 +106,19 @@ class QueryList
      */
     public static function setLog($handler)
     {
-        if(is_string($handler))
-        {
-            $handler = new StreamHandler($handler,Logger::INFO);
-        }
-        self::$logger = new Logger('QueryList');
-        self::$logger->pushHandler($handler);
+    	if(class_exists(Logger::class))
+    	{
+    		if(is_string($handler))
+    		{
+    		    $handler = new StreamHandler($handler,Logger::INFO);
+    		}
+    		self::$logger = new Logger('QueryList');
+    		self::$logger->pushHandler($handler);
+    	}else{
+    		throw new Exception("You need to install the package [monolog/monolog]");
+    		
+    	}
+        
     }
 
     /**
