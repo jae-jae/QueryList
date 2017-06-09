@@ -7,6 +7,9 @@
         "PHP":">=5.3.0",
         "jaeger/phpquery-single": "^0.9"
     },
+    "suggest":{
+    	"monolog/monolog":"Log support"
+    },
     "license": "MIT",
     "authors": [
         {

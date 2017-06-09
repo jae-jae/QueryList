@@ -106,7 +106,7 @@ class QueryList
      */
     public static function setLog($handler)
     {
-    	if(class_exists(Logger::class))
+    	if(class_exists('Monolog\Logger'))
     	{
     		if(is_string($handler))
     		{
