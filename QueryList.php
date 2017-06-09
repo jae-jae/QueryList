@@ -14,7 +14,7 @@ use Monolog\Handler\StreamHandler;
  * @author 			Jaeger
  * @email 			734708094@qq.com
  * @link            http://git.oschina.net/jae/QueryList
- * @version         3.1.3
+ * @version         3.2.1
  *
  * @example 
  *
