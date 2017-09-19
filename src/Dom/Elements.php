@@ -30,7 +30,12 @@ class Elements
     public function __call($name, $arguments)
     {
         $obj = call_user_func_array([$this->elements,$name],$arguments);
-        return $obj instanceof phpQueryObject?(new self($obj)):$obj;
+        if($obj instanceof phpQueryObject){
+            $obj = new self($obj);
+        }else if(is_string($obj)){
+            $obj = trim($obj);
+        }
+        return $obj;
     }
 
     public function map($callback)
@@ -49,5 +54,17 @@ class Elements
         });
     }
 
+    public function texts()
+    {
+        return $this->map(function($item){
+            return trim($item->text());
+        });
+    }
 
+    public function htmls()
+    {
+        return $this->map(function($item){
+            return trim($item->html());
+        });
+    }
 }
