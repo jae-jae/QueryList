@@ -1,6 +1,7 @@
 <?php
 namespace QL;
 use phpQuery;
+use QL\Dom\Dom;
 
 /**
  * QueryList
@@ -36,7 +37,8 @@ class QueryList
     }
 
     /**
-     * @param mixed $html
+     * @param $html
+     * @return $this
      */
     public function setHtml($html)
     {
@@ -47,7 +49,7 @@ class QueryList
 
     public function find($selector)
     {
-        return pq($this->document)->find($selector);
+        return (new Dom($this->document))->find($selector);
     }
 
 

@@ -5,7 +5,8 @@
     "homepage": "http://querylist.cc",
     "require": {
         "PHP":">=5.6.0",
-        "jaeger/phpquery-single": "^0.9"
+        "jaeger/phpquery-single": "^0.9",
+        "illuminate/support": "^5.5"
     },
     "suggest":{
     	"monolog/monolog":"Log support"
