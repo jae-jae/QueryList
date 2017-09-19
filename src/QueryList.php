@@ -21,7 +21,6 @@ class QueryList
     protected $document;
     protected $rules;
     protected $range = null;
-    protected $isRemoveHead = false;
 
     /**
      * QueryList constructor.
@@ -68,19 +67,20 @@ class QueryList
         return $this;
     }
 
-    public function removeHead($isRemoveHead = true)
+    public function removeHead()
     {
-        $this->isRemoveHead = $isRemoveHead;
+        $html = preg_replace('/<head.+?>.+<\/head>/is','<head></head>',$this->html);
+        $this->setHtml($html);
         return $this;
     }
 
     public function query($callback = null)
     {
-        $data = $this->_getList();
+        $data = $this->getList();
         return is_null($callback)?$data:$data->map($callback);
     }
 
-    protected function _getList()
+    protected function getList()
     {
         $data = [];
         $document = $this->document;
@@ -94,10 +94,10 @@ class QueryList
 
                     switch ($reg_value[1]) {
                         case 'text':
-                            $data[$i][$key] = $this->_allowTags(pq($iobj)->html(),$tags);
+                            $data[$i][$key] = $this->allowTags(pq($iobj)->html(),$tags);
                             break;
                         case 'html':
-                            $data[$i][$key] = $this->_stripTags(pq($iobj)->html(),$tags);
+                            $data[$i][$key] = $this->stripTags(pq($iobj)->html(),$tags);
                             break;
                         default:
                             $data[$i][$key] = pq($iobj)->attr($reg_value[1]);
@@ -120,10 +120,10 @@ class QueryList
                 foreach ($lobj as $item) {
                     switch ($reg_value[1]) {
                         case 'text':
-                            $data[$i][$key] = $this->_allowTags(pq($item)->html(),$tags);
+                            $data[$i][$key] = $this->allowTags(pq($item)->html(),$tags);
                             break;
                         case 'html':
-                            $data[$i][$key] = $this->_stripTags(pq($item)->html(),$tags);
+                            $data[$i][$key] = $this->stripTags(pq($item)->html(),$tags);
                             break;
                         default:
                             $data[$i][$key] = pq($item)->attr($reg_value[1]);
@@ -148,10 +148,10 @@ class QueryList
      * @param  string $tags_str 多个标签名之间用空格隔开
      * @return string
      */
-    protected function _stripTags($html,$tags_str)
+    protected function stripTags($html,$tags_str)
     {
-        $tagsArr = $this->_tag($tags_str);
-        $html = $this->_removeTags($html,$tagsArr[1]);
+        $tagsArr = $this->tag($tags_str);
+        $html = $this->removeTags($html,$tagsArr[1]);
         $p = array();
         foreach ($tagsArr[0] as $tag) {
             $p[]="/(<(?:\/".$tag."|".$tag.")[^>]*>)/i";
@@ -166,10 +166,10 @@ class QueryList
      * @param  string $tags_str 多个标签名之间用空格隔开
      * @return string
      */
-    protected function _allowTags($html,$tags_str)
+    protected function allowTags($html,$tags_str)
     {
-        $tagsArr = $this->_tag($tags_str);
-        $html = $this->_removeTags($html,$tagsArr[1]);
+        $tagsArr = $this->tag($tags_str);
+        $html = $this->removeTags($html,$tagsArr[1]);
         $allow = '';
         foreach ($tagsArr[0] as $tag) {
             $allow .= "<$tag> ";
@@ -177,7 +177,7 @@ class QueryList
         return strip_tags(trim($html),$allow);
     }
 
-    protected function _tag($tags_str)
+    protected function tag($tags_str)
     {
         $tagArr = preg_split("/\s+/",$tags_str,-1,PREG_SPLIT_NO_EMPTY);
         $tags = array(array(),array());
@@ -199,7 +199,7 @@ class QueryList
      * @param  array  $tags 标签数组
      * @return string
      */
-    protected function _removeTags($html,$tags)
+    protected function removeTags($html,$tags)
     {
         $tag_str = '';
         if(count($tags))
