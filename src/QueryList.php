@@ -21,15 +21,15 @@ class QueryList
     protected $document;
     protected $rules;
     protected $range = null;
-    protected $encoder;
+    protected $kernel;
 
     /**
      * QueryList constructor.
      */
     public function __construct()
     {
+        $this->kernel = (new Kernel())->bootstrap();
     }
-
 
     /**
      * @return mixed
