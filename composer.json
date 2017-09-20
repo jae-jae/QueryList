@@ -4,9 +4,9 @@
     "keywords":["QueryList","phpQuery","spider"],
     "homepage": "http://querylist.cc",
     "require": {
-        "PHP":">=5.6.0",
+        "PHP":">=7.0",
         "jaeger/phpquery-single": "^0.9",
-        "illuminate/support": "^5.5"
+        "tightenco/collect": "^5.5"
     },
     "suggest":{
     	"monolog/monolog":"Log support"
@@ -22,5 +22,8 @@
         "psr-4":{
             "QL\\":"src"
         }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^3.3"
     }
 }

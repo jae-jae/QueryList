@@ -21,6 +21,7 @@ class QueryList
     protected $document;
     protected $rules;
     protected $range = null;
+    protected $encoder;
 
     /**
      * QueryList constructor.
@@ -88,10 +89,9 @@ class QueryList
             $robj = pq($document)->find($this->range);
             $i = 0;
             foreach ($robj as $item) {
-                while (list($key, $reg_value) = each($this->rules)) {
-                    $tags = isset($reg_value[2])?$reg_value[2]:'';
+                foreach ($this->rules as $key => $reg_value){
+                    $tags = $reg_value[2] ?? '';
                     $iobj = pq($item)->find($reg_value[0]);
-
                     switch ($reg_value[1]) {
                         case 'text':
                             $data[$i][$key] = $this->allowTags(pq($iobj)->html(),$tags);
@@ -108,13 +108,11 @@ class QueryList
                         $data[$i][$key] = call_user_func($reg_value[3],$data[$i][$key],$key);
                     }
                 }
-                //重置数组指针
-                reset($this->rules);
                 $i++;
             }
         } else {
-            while (list($key, $reg_value) = each($this->rules)) {
-                $tags = isset($reg_value[2])?$reg_value[2]:'';
+            foreach ($this->rules as $key => $reg_value){
+                $tags = $reg_value[2] ?? '';
                 $lobj = pq($document)->find($reg_value[0]);
                 $i = 0;
                 foreach ($lobj as $item) {
