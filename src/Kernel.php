@@ -49,7 +49,7 @@ class Kernel
         $this->binds[$name] = $provider;
     }
 
-    public function getBind(string $name)
+    public function getService(string $name)
     {
         if(!$this->binds->offsetExists($name)){
             throw new ServiceNotFoundException("Service: {$name} not found!");
