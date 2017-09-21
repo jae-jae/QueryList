@@ -9,5 +9,14 @@ namespace QL\Services;
 
 class EncodeService
 {
+    public static function convert($ql,string $outputEncoding,string $inputEncoding = null)
+    {
+        dump($outputEncoding,$inputEncoding);
+        return $ql;
+    }
 
+    public static function detect()
+    {
+
+    }
 }

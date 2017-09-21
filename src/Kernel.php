@@ -8,8 +8,9 @@
 namespace QL;
 
 use QL\Contracts\ServiceProviderContract;
+use QL\Exceptions\ServiceNotFoundException;
 use QL\Providers\EncodeServiceProvider;
-
+use Closure;
 
 class Kernel
 {
@@ -17,12 +18,22 @@ class Kernel
         EncodeServiceProvider::class
     ];
 
-    protected $binds = [];
+    protected $binds;
+    protected $ql;
+
+    /**
+     * Kernel constructor.
+     * @param $ql
+     */
+    public function __construct(QueryList $ql)
+    {
+        $this->ql = $ql;
+        $this->binds = collect();
+    }
 
     public function bootstrap()
     {
         $this->registerProviders();
-
         return $this;
     }
 
@@ -33,9 +44,17 @@ class Kernel
         }
     }
 
-    public function bind($name, $provider)
+    public function bind(string $name,Closure $provider)
     {
-        $this->binds[$name] = value($provider);
+        $this->binds[$name] = $provider;
+    }
+
+    public function getBind(string $name)
+    {
+        if(!$this->binds->offsetExists($name)){
+            throw new ServiceNotFoundException("Service: {$name} not found!");
+        }
+        return $this->binds[$name];
     }
 
     private function register(ServiceProviderContract $instance)

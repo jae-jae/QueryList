@@ -15,8 +15,8 @@ class EncodeServiceProvider implements ServiceProviderContract
 {
     public function register(Kernel $kernel)
     {
-        $kernel->bind('encoder',function (){
-            return new EncodeService();
+        $kernel->bind('encoding',function (string $outputEncoding,string $inputEncoding = null){
+            return EncodeService::convert($this,$outputEncoding,$inputEncoding);
         });
     }
 }

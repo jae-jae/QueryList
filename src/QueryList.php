@@ -28,8 +28,14 @@ class QueryList
      */
     public function __construct()
     {
-        $this->kernel = (new Kernel())->bootstrap();
+        $this->kernel = (new Kernel($this))->bootstrap();
     }
+
+    public function __call($name, $arguments)
+    {
+       return $this->kernel->getBind($name)->call($this,...$arguments);
+    }
+
 
     /**
      * @return mixed
