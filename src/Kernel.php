@@ -11,10 +11,14 @@ use QL\Contracts\ServiceProviderContract;
 use QL\Exceptions\ServiceNotFoundException;
 use QL\Providers\EncodeServiceProvider;
 use Closure;
+use QL\Providers\HttpServiceProvider;
+use QL\Providers\SystemServiceProvider;
 
 class Kernel
 {
     protected $providers = [
+        SystemServiceProvider::class,
+        HttpServiceProvider::class,
         EncodeServiceProvider::class
     ];
 

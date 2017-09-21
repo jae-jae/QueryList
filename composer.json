@@ -6,7 +6,8 @@
     "require": {
         "PHP":">=7.0",
         "jaeger/phpquery-single": "^0.9",
-        "tightenco/collect": "^5.5"
+        "tightenco/collect": "^5.5",
+        "jaeger/g-http": "^1.1"
     },
     "suggest":{
     	"monolog/monolog":"Log support"

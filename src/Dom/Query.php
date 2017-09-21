@@ -35,7 +35,7 @@ class Query
 
     public function setHtml($html)
     {
-        $this->html = $html;
+        $this->html = value($html);
         $this->document = phpQuery::newDocumentHTML($this->html);
         return $this->ql;
     }

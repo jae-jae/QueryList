@@ -22,12 +22,15 @@ use QL\Dom\Query;
  *
  * @method QueryList getHtml()
  * @method QueryList setHtml($html)
+ * @method QueryList html($html)
  * @method Dom\Elements find($selector)
  * @method QueryList rules(array $rules)
  * @method QueryList range($range)
  * @method QueryList removeHead()
  * @method \Illuminate\Support\Collection query($callback = null)
  * @method QueryList encoding(string $outputEncoding,string $inputEncoding = null)
+ * @method QueryList get($url,$args = null,$otherArgs = [])
+ * @method QueryList post($url,$args = null,$otherArgs = [])
  */
 class QueryList
 {
