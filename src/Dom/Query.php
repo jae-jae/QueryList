@@ -74,14 +74,13 @@ class Query
     protected function getList()
     {
         $data = [];
-        $document = $this->document;
         if (!empty($this->range)) {
-            $robj = pq($document)->find($this->range);
+            $robj = $this->document->find($this->range);
             $i = 0;
             foreach ($robj as $item) {
                 foreach ($this->rules as $key => $reg_value){
                     $tags = $reg_value[2] ?? '';
-                    $iobj = pq($item)->find($reg_value[0]);
+                    $iobj = pq($item,$this->document)->find($reg_value[0]);
                     switch ($reg_value[1]) {
                         case 'text':
                             $data[$i][$key] = $this->allowTags(pq($iobj)->html(),$tags);
@@ -103,18 +102,18 @@ class Query
         } else {
             foreach ($this->rules as $key => $reg_value){
                 $tags = $reg_value[2] ?? '';
-                $lobj = pq($document)->find($reg_value[0]);
+                $lobj = $this->document->find($reg_value[0]);
                 $i = 0;
                 foreach ($lobj as $item) {
                     switch ($reg_value[1]) {
                         case 'text':
-                            $data[$i][$key] = $this->allowTags(pq($item)->html(),$tags);
+                            $data[$i][$key] = $this->allowTags(pq($item,$this->document)->html(),$tags);
                             break;
                         case 'html':
-                            $data[$i][$key] = $this->stripTags(pq($item)->html(),$tags);
+                            $data[$i][$key] = $this->stripTags(pq($item,$this->document)->html(),$tags);
                             break;
                         default:
-                            $data[$i][$key] = pq($item)->attr($reg_value[1]);
+                            $data[$i][$key] = pq($item,$this->document)->attr($reg_value[1]);
                             break;
                     }
 
@@ -195,7 +194,7 @@ class Query
             foreach ($tags as $tag) {
                 $tag_str .= $tag_str?','.$tag:$tag;
             }
-            phpQuery::$defaultCharset = $this->inputEncoding?$this->inputEncoding:$this->htmlEncoding;
+//            phpQuery::$defaultCharset = $this->inputEncoding?$this->inputEncoding:$this->htmlEncoding;
             $doc = phpQuery::newDocumentHTML($html);
             pq($doc)->find($tag_str)->remove();
             $html = pq($doc)->htmlOuter();
