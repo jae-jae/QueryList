@@ -31,11 +31,13 @@ use QL\Dom\Query;
  * @method QueryList encoding(string $outputEncoding,string $inputEncoding = null)
  * @method QueryList get($url,$args = null,$otherArgs = [])
  * @method QueryList post($url,$args = null,$otherArgs = [])
+ * @method QueryList use($plugins,...$opt)
  */
 class QueryList
 {
     protected $query;
     protected $kernel;
+    protected static $plugins = [];
 
     /**
      * QueryList constructor.
@@ -44,6 +46,7 @@ class QueryList
     {
         $this->query = new Query($this);
         $this->kernel = (new Kernel($this))->bootstrap();
+        Config::getInstance()->bootstrap($this);
     }
 
     public function __call($name, $arguments)
@@ -73,10 +76,19 @@ class QueryList
         return $instance;
     }
 
+    public static function config()
+    {
+        return Config::getInstance();
+    }
+
     public function destruct()
     {
         phpQuery::$documents = [];
     }
 
+    public function bind(string $name,\Closure $provide)
+    {
+        $this->kernel->bind($name,$provide);
+    }
 
 }

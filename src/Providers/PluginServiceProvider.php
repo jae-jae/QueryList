@@ -9,18 +9,15 @@ namespace QL\Providers;
 
 use QL\Contracts\ServiceProviderContract;
 use QL\Kernel;
+use QL\Services\PluginService;
 
-class SystemServiceProvider implements ServiceProviderContract
+class PluginServiceProvider implements ServiceProviderContract
 {
     public function register(Kernel $kernel)
     {
-        $kernel->bind('html',function (...$args){
-            $this->setHtml(...$args);
-            return $this;
-        });
-
-        $kernel->bind('global',function (){
-
+        $kernel->bind('use',function ($plugins,...$opt){
+            return PluginService::install($this,$plugins,...$opt);
         });
     }
+
 }

@@ -12,6 +12,7 @@ use QL\Exceptions\ServiceNotFoundException;
 use QL\Providers\EncodeServiceProvider;
 use Closure;
 use QL\Providers\HttpServiceProvider;
+use QL\Providers\PluginServiceProvider;
 use QL\Providers\SystemServiceProvider;
 
 class Kernel
@@ -19,7 +20,8 @@ class Kernel
     protected $providers = [
         SystemServiceProvider::class,
         HttpServiceProvider::class,
-        EncodeServiceProvider::class
+        EncodeServiceProvider::class,
+        PluginServiceProvider::class
     ];
 
     protected $binds;
@@ -37,6 +39,7 @@ class Kernel
 
     public function bootstrap()
     {
+        //注册服务提供者
         $this->registerProviders();
         return $this;
     }

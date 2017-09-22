@@ -35,9 +35,6 @@ use phpQueryObject;
  * @method Elements filterCallback($callback,$_skipHistory)
  * @method Elements filter($selectors,$_skipHistory)
  * @method  load($url,$data,$callback)
- * @method  css()
- * @method  show()
- * @method  hide()
  * @method Elements trigger($type,$data)
  * @method Elements triggerHandler($type,$data)
  * @method Elements bind($type,$data,$callback)
@@ -199,4 +196,13 @@ class Elements
             return trim($item->html());
         });
     }
+
+    /**
+     * @return phpQueryObject
+     */
+    public function getElements(): phpQueryObject
+    {
+        return $this->elements;
+    }
+
 }

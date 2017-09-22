@@ -33,10 +33,10 @@ class Query
         return $this->html;
     }
 
-    public function setHtml($html)
+    public function setHtml($html, $charset = null)
     {
         $this->html = value($html);
-        $this->document = phpQuery::newDocumentHTML($this->html);
+        $this->document = phpQuery::newDocumentHTML($this->html,$charset);
         return $this->ql;
     }
 

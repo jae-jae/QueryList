@@ -1,0 +1,58 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Jaeger <JaegerCode@gmail.com>
+ * Date: 2017/9/22
+ */
+
+namespace QL;
+
+
+class Config
+{
+    protected static $instance = null;
+
+    protected $plugins;
+
+    /**
+     * Config constructor.
+     */
+    public function __construct()
+    {
+        $this->plugins = collect();
+    }
+
+
+    public static function getInstance()
+    {
+        self::$instance || self::$instance = new self();
+        return self::$instance;
+    }
+
+    public function use($plugins,...$opt)
+    {
+        if(is_string($plugins)){
+            $this->plugins->push([$plugins,$opt]);
+        }else{
+            $this->plugins = $this->plugins->merge($plugins);
+        }
+        return $this;
+    }
+
+    public function bootstrap(QueryList $queryList)
+    {
+        $this->installPlugins($queryList);
+    }
+
+    protected function installPlugins(QueryList $queryList)
+    {
+        $this->plugins->each(function($plugin) use($queryList){
+            if(is_string($plugin)){
+                $queryList->use($plugin);
+            }else{
+                $queryList->use($plugin[0],...$plugin[1]);
+            }
+        });
+    }
+
+}
