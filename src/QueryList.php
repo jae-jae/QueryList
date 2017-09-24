@@ -14,7 +14,7 @@
 namespace QL;
 use phpQuery;
 use QL\Dom\Query;
-
+use Illuminate\Support\Collection;
 
 /**
  * Class QueryList
@@ -27,7 +27,8 @@ use QL\Dom\Query;
  * @method QueryList rules(array $rules)
  * @method QueryList range($range)
  * @method QueryList removeHead()
- * @method \Illuminate\Support\Collection query($callback = null)
+ * @method QueryList query($callback = null)
+ * @method Collection getData($callback = null)
  * @method QueryList encoding(string $outputEncoding,string $inputEncoding = null)
  * @method QueryList get($url,$args = null,$otherArgs = [])
  * @method QueryList post($url,$args = null,$otherArgs = [])

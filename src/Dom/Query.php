@@ -7,8 +7,10 @@
 
 namespace QL\Dom;
 
+use Illuminate\Support\Collection;
 use phpQuery;
 use QL\QueryList;
+use Closure;
 
 class Query
 {
@@ -17,6 +19,10 @@ class Query
     protected $rules;
     protected $range = null;
     protected $ql;
+    /**
+     * @var Collection
+     */
+    protected $data;
 
 
     public function __construct(QueryList $ql)
@@ -25,9 +31,6 @@ class Query
     }
 
 
-    /**
-     * @return mixed
-     */
     public function getHtml()
     {
         return $this->html;
@@ -39,6 +42,17 @@ class Query
         $this->document = phpQuery::newDocumentHTML($this->html,$charset);
         return $this->ql;
     }
+
+    public function getData(Closure $callback = null)
+    {
+        return  is_null($callback) ? $this->data : $this->data->map($callback);
+    }
+
+    protected function setData(Collection $data)
+    {
+        $this->data = $data;
+    }
+
 
     public function find($selector)
     {
@@ -65,10 +79,11 @@ class Query
         return $this->ql;
     }
 
-    public function query($callback = null)
+    public function query(Closure $callback = null)
     {
-        $data = $this->getList();
-        return is_null($callback)?$data:$data->map($callback);
+        $this->data = $this->getList();
+        $callback && $this->data = $this->data->map($callback);
+        return $this;
     }
 
     protected function getList()
