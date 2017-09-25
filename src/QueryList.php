@@ -15,20 +15,22 @@ namespace QL;
 use phpQuery;
 use QL\Dom\Query;
 use Illuminate\Support\Collection;
+use Closure;
 
 /**
  * Class QueryList
  * @package QL
  *
- * @method QueryList getHtml()
+ * @method string getHtml()
  * @method QueryList setHtml($html)
  * @method QueryList html($html)
  * @method Dom\Elements find($selector)
  * @method QueryList rules(array $rules)
  * @method QueryList range($range)
  * @method QueryList removeHead()
- * @method QueryList query($callback = null)
- * @method Collection getData($callback = null)
+ * @method QueryList query(Closure $callback = null)
+ * @method Collection getData(Closure $callback = null)
+ * @method QueryList setData(Collection $data)
  * @method QueryList encoding(string $outputEncoding,string $inputEncoding = null)
  * @method QueryList get($url,$args = null,$otherArgs = [])
  * @method QueryList post($url,$args = null,$otherArgs = [])
@@ -87,9 +89,10 @@ class QueryList
         phpQuery::$documents = [];
     }
 
-    public function bind(string $name,\Closure $provide)
+    public function bind(string $name,Closure $provide)
     {
         $this->kernel->bind($name,$provide);
+        return $this;
     }
 
 }

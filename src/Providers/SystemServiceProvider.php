@@ -19,8 +19,5 @@ class SystemServiceProvider implements ServiceProviderContract
             return $this;
         });
 
-        $kernel->bind('global',function (){
-
-        });
     }
 }

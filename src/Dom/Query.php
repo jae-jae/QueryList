@@ -48,7 +48,7 @@ class Query
         return  is_null($callback) ? $this->data : $this->data->map($callback);
     }
 
-    protected function setData(Collection $data)
+    public function setData(Collection $data)
     {
         $this->data = $data;
     }
@@ -83,7 +83,7 @@ class Query
     {
         $this->data = $this->getList();
         $callback && $this->data = $this->data->map($callback);
-        return $this;
+        return $this->ql;
     }
 
     protected function getList()
