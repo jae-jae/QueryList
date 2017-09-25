@@ -6,13 +6,14 @@
  */
 
 namespace QL;
-
+use Closure;
 
 class Config
 {
     protected static $instance = null;
 
     protected $plugins;
+    protected $binds;
 
     /**
      * Config constructor.
@@ -20,6 +21,7 @@ class Config
     public function __construct()
     {
         $this->plugins = collect();
+        $this->binds = collect();
     }
 
 
@@ -39,9 +41,16 @@ class Config
         return $this;
     }
 
+    public function bind(string $name, Closure $provider)
+    {
+        $this->binds[$name] = $provider;
+        return $this;
+    }
+
     public function bootstrap(QueryList $queryList)
     {
         $this->installPlugins($queryList);
+        $this->installBind($queryList);
     }
 
     protected function installPlugins(QueryList $queryList)
@@ -52,6 +61,13 @@ class Config
             }else{
                 $queryList->use($plugin[0],...$plugin[1]);
             }
+        });
+    }
+
+    protected function installBind(QueryList $queryList)
+    {
+        $this->binds->each(function ($provider,$name) use($queryList){
+            $queryList->bind($name,$provider);
         });
     }
 
