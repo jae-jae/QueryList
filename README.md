@@ -115,10 +115,18 @@ Array
         //...
 )
 ```
+#### 编码转换
+```php
+// 输出编码:UTF-8,输入编码:GB2312
+QueryList::get('https://top.etao.com')->encoding('UTF-8','GB2312')->find('a')->texts();
+
+// 输出编码:UTF-8,输入编码:自动识别
+QueryList::get('https://top.etao.com')->encoding('UTF-8')->find('a')->texts();
+```
 
 #### HTTP网络操作
 - 携带cookie登录新浪微博
-```
+```php
 //采集新浪微博需要登录才能访问的页面
 $ql = QueryList::get('http://weibo.com','param1=testvalue & params2=somevalue',[
     'headers' => [
@@ -131,7 +139,7 @@ echo $ql->find('title')->text();
 //输出: 我的首页 微博-随时随地发现新鲜事
 ```
 - 使用Http代理
-```
+```php
 $urlParams = ['param1' => 'testvalue','params2' => 'somevalue'];
 $opts = [
 	// 设置http代理
@@ -152,7 +160,7 @@ $ql->get('http://httpbin.org/get',$urlParams,$opts);
 ```
 
 - 模拟登录
-```
+```php
 // 用post登录
 $ql = QueryList::post('http://xxxx.com/login',[
     'username' => 'admin',
@@ -165,7 +173,7 @@ $ql->get('http://xxx.com/admin/page');
 
 #### Form表单操作
 模拟登陆GitHub
-```
+```php
 // 获取QueryList实例
 $ql = QueryList::getInstance();
 //获取到登录表单
@@ -220,7 +228,7 @@ $ql->bind('myHttp',function ($url){
 
 #### 插件使用
 使用CURL多线程插件,多线程采集GitHub排行榜:
-```
+```php
 $ql = QueryList::use(CurlMulti::class);
 $ql->curlMulti([
     'https://github.com/trending/php',
