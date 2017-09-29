@@ -1,5 +1,5 @@
 # QueryList  简介
-`QueryList`是一套简洁、优雅的PHP采集工具，基于phpQuery。
+`QueryList`是一套简洁、优雅、可扩展的PHP采集工具(爬虫)，基于phpQuery。
 
 ## 特性
 - 拥有与jQuery完全相同的CSS3 DOM选择器
