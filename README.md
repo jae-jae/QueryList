@@ -1,4 +1,4 @@
-# QueryList V4 简介
+# QueryList  简介
 `QueryList`是一套简洁、优雅的PHP采集工具，基于phpQuery。
 
 ## 特性
