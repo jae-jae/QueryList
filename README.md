@@ -78,7 +78,7 @@ $data = $ql->find('.two')->children()->map(function ($item){
 
 $ql->find('a')->attr('href', 'newVal')->removeClass('className')->html('newHtml')->...
 $ql->find('div > p')->add('div > ul')->filter(':has(a)')->find('p:first')->nextAll()->andSelf()->...
-$ql->find('div.old')->replaceWith( $ql->find('div.new')->clone() )->appendTo('.trash')->prepend('Deleted')->...
+$ql->find('div.old')->replaceWith( $ql->find('div.new')->clone())->appendTo('.trash')->prepend('Deleted')->...
 ```
 #### 列表采集
 采集百度搜索结果列表的标题和链接:
@@ -100,7 +100,7 @@ Array
     [0] => Array
         (
             [title] => QueryList|基于phpQuery的无比强大的PHP采集工具
-            [link] => http://www.baidu.com/link?url=GU_YbDT2IHk4ns1tjG2I8_vjmH0SCJEAPuuZNirb4pOqoQ_ekNXilZhbcbKCfkhf
+            [link] => http://www.baidu.com/link?url=GU_YbDT2IHk4ns1tjG2I8_vjmH0SCJEAPuuZN
         )
     [1] => Array
         (
@@ -110,15 +110,146 @@ Array
     [2] => Array
         (
             [title] => 介绍- QueryList指导文档
-            [link] => http://www.baidu.com/link?url=pSypvMovqS4v2sWeQo5fDBJ4EoYhXYi0Lxx-_Yeb8eUj82NZpHTSotC1Uh9hgCQy
+            [link] => http://www.baidu.com/link?url=pSypvMovqS4v2sWeQo5fDBJ4EoYhXYi0Lxx
         )
         //...
 )
 ```
 
 #### HTTP网络操作
+- 携带cookie登录新浪微博
+```
+//采集新浪微博需要登录才能访问的页面
+$ql = QueryList::get('http://weibo.com','param1=testvalue & params2=somevalue',[
+    'headers' => [
+        //填写从浏览器获取到的cookie
+        'Cookie' => 'SINAGLOBAL=546064; wb_cmtLike_2112031=1; wvr=6;....'
+    ]
+]);
+//echo $ql->getHtml();
+echo $ql->find('title')->text();
+//输出: 我的首页 微博-随时随地发现新鲜事
+```
+- 使用Http代理
+```
+$urlParams = ['param1' => 'testvalue','params2' => 'somevalue'];
+$opts = [
+	// 设置http代理
+    'proxy' => 'http://222.141.11.17:8118',
+    //设置超时时间，单位：秒
+    'timeout' => 30,
+     // 伪造http头
+    'headers' => [
+        'Referer' => 'https://querylist.cc/',
+        'User-Agent' => 'testing/1.0',
+        'Accept'     => 'application/json',
+        'X-Foo'      => ['Bar', 'Baz'],
+        'Cookie'    => 'abc=111;xxx=222'
+    ]
+];
+$ql->get('http://httpbin.org/get',$urlParams,$opts);
+// echo $ql->getHtml();
+```
+
+- 模拟登录
+```
+// 用post登录
+$ql = QueryList::post('http://xxxx.com/login',[
+    'username' => 'admin',
+    'password' => '123456'
+])->get('http://xxx.com/admin');
+//采集需要登录才能访问的页面
+$ql->get('http://xxx.com/admin/page');
+//echo $ql->getHtml();
+```
 
 #### Form表单操作
+模拟登陆GitHub
+```
+// 获取QueryList实例
+$ql = QueryList::getInstance();
+//获取到登录表单
+$form = $ql->get('https://github.com/login')->find('form');
+
+//填写GitHub用户名和密码
+$form->find('input[name=login]')->val('your github username or email');
+$form->find('input[name=password]')->val('your github password');
+
+//序列化表单数据
+$fromData = $form->serializeArray();
+$postData = [];
+foreach ($fromData as $item) {
+    $postData[$item['name']] = $item['value'];
+}
+
+//提交登录表单
+$actionUrl = 'https://github.com'.$form->attr('action');
+$ql->post($actionUrl,$postData);
+//判断登录是否成功
+// echo $ql->getHtml();
+$userName = $ql->find('.header-nav-current-user>.css-truncate-target')->text();
+if($userName)
+{
+    echo '登录成功!欢迎你:'.$userName;
+}else{
+    echo '登录失败!';
+}
+```
+#### Bind功能扩展
+自定义扩展一个`myHttp`方法:
+```php
+$ql = QueryList::getInstance();
+
+//绑定一个myHttp方法到QueryList对象
+$ql->bind('myHttp',function ($url){
+    $html = file_get_contents($url);
+    $this->setHtml($html);
+    return $this;
+});
+
+//然后就可以通过注册的名字来调用
+$data = $ql->myHttp('https://toutiao.io')->find('h3 a')->texts();
+print_r($data->all());
+```
+或者把实现体封装到class，然后这样绑定:
+```php
+$ql->bind('myHttp',function ($url){
+    return new MyHttp($this,$url);
+});
+```
+
+#### 插件使用
+使用CURL多线程插件,多线程采集GitHub排行榜:
+```
+$ql = QueryList::use(CurlMulti::class);
+$ql->curlMulti([
+    'https://github.com/trending/php',
+    'https://github.com/trending/go',
+    //.....more urls
+])
+ // 每个任务成功完成调用此回调
+ ->success(function (QueryList $ql,CurlMulti $curl,$r){
+    echo "Current url:{$r['info']['url']} \r\n";
+    $data = $ql->find('h3 a')->texts();
+    print_r($data->all());
+})
+ // 每个任务失败回调
+->error(function ($errorInfo,CurlMulti $curl){
+    echo "Current url:{$errorInfo['info']['url']} \r\n";
+    print_r($errorInfo['error']);
+})
+->start([
+	// 最大并发数
+    'maxThread' => 10,
+    // 错误重试次数
+    'maxTry' => 3,
+]);
+
+```
+
+## 插件
+- [jae-jae/QueryList-AbsoluteUrl](https://github.com/jae-jae/QueryList-AbsoluteUrl) : 转换URL相对路径到绝对路径
+- [jae-jae/QueryList-CurlMulti](https://github.com/jae-jae/QueryList-CurlMulti) : Curl多线程采集
 
 ## 寻求帮助?
 - QueryList交流社区: [http://querylist.cc/](http://querylist.cc/)
