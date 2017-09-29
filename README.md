@@ -43,7 +43,7 @@ QueryList::get('http://www.nipic.com')->find('img')->attrs('src');
 ```
 - 采集百度搜索结果
 
-```
+```php
 $ql = QueryList::get('http://www.baidu.com/s?wd=QueryList');
 
 $ql->find('title')->text(); // 获取网站标题
@@ -62,7 +62,7 @@ $ql->find('img')->map(function($img){
 ```
 - 更多用法
 
-```
+```php
 $ql->find('#head')->append('<div>追加内容</div>')->find('div')->htmls();
 $ql->find('.two')->children('img')->attrs('alt'); //获取class为two元素下的所有img孩子节点
 //遍历class为two元素下的所有孩子节点
@@ -82,7 +82,7 @@ $ql->find('div.old')->replaceWith( $ql->find('div.new')->clone() )->appendTo('.t
 ```
 #### 列表采集
 采集百度搜索结果列表的标题和链接:
-```
+```php
 $data = QueryList::get('http://www.baidu.com/s?wd=QueryList')
 	// 设置采集规则
     ->rules([ 
