@@ -1,5 +1,5 @@
 # QueryList Community
-There are QueryList plugins and QueryList-based projects from open-source contributors，Welcome to [Pull request](#contributing guide) to submit your own！
+There are QueryList plugins and QueryList-based projects from open-source contributors，Welcome to [Pull request](#contributing-guide) to submit your own！
 
 ## Plugins
 ### Tool plugin
