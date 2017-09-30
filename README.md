@@ -236,8 +236,8 @@ $ql->bind('myHttp',function ($url){
 #### 插件使用
 - 使用PhantomJS插件采集JavaScript动态渲染的页面:
 
-```
-// 安装时设置PhantomJS二级制文件路径 
+```php
+// 安装时设置PhantomJS二进制文件路径 
 $ql = QueryList::use(PhantomJs::class,'/usr/local/bin/phantomjs');
 
 // 采集今日头条手机版
