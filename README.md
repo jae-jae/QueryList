@@ -259,7 +259,10 @@ $ql->curlMulti([
 - [jae-jae/QueryList-AbsoluteUrl](https://github.com/jae-jae/QueryList-AbsoluteUrl) : 转换URL相对路径到绝对路径
 - [jae-jae/QueryList-CurlMulti](https://github.com/jae-jae/QueryList-CurlMulti) : Curl多线程采集
 
-查看更多的QueryList插件和基于QueryList的产品:[QueryList社区力量](COMMUNITY-ZH.md)
+查看更多的QueryList插件和基于QueryList的产品:[QueryList社区力量](https://github.com/jae-jae/QueryList-Community)
+
+## 贡献
+欢迎为QueryList贡献代码。关于贡献插件可以查看:[QueryList插件贡献说明](https://github.com/jae-jae/QueryList-Community/blob/master/CONTRIBUTING.md)
 
 ## 寻求帮助?
 - QueryList交流社区: [http://querylist.cc/](http://querylist.cc/)
