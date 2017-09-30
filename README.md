@@ -292,12 +292,12 @@ $ql->curlMulti([
 欢迎为QueryList贡献代码。关于贡献插件可以查看:[QueryList插件贡献说明](https://github.com/jae-jae/QueryList-Community/blob/master/CONTRIBUTING.md)
 
 ## 寻求帮助?
-- QueryList交流社区: [http://querylist.cc/](http://querylist.cc/)
-- QueryList文档: [http://doc.querylist.cc/](http://doc.querylist.cc/)
-- QueryList交流QQ群:123266961 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=a1b248ae30b3f711bdab4f799df839300dc7fed54331177035efa0513da027f6"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="╰☆邪恶 魔方☆" title="╰☆邪恶 魔方☆"></a>
-
-- Git@OSC:http://git.oschina.net/jae/QueryList
+- QueryList主页: [http://querylist.cc](http://querylist.cc/)
+- QueryList文档: [http://doc.querylist.cc](http://doc.querylist.cc/)
+- QueryList问答:[http://wenda.querylist.cc](http://wenda.querylist.cc/)
+- QueryList交流QQ群:123266961 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=a1b248ae30b3f711bdab4f799df839300dc7fed54331177035efa0513da027f6"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="cafeEX" title="cafeEX"></a>
 - GitHub:https://github.com/jae-jae/QueryList
+- Git@OSC:http://git.oschina.net/jae/QueryList
 
 ## Author
 Jaeger <JaegerCode@gmail.com>
