@@ -19,11 +19,11 @@
 - Has a wealth of plug-ins
 
 Through plug-ins you can easily implement things like:
-- multithreaded crawl
+- Multithreaded crawl
 - Crawl JavaScript dynamic rendering page (PhantomJS/headless WebKit)
-- image downloads to local
-- simulate browser behavior such as submitting Form forms
-- web crawler
+- Image downloads to local
+- Simulate browser behavior such as submitting Form forms
+- Web crawler
 - .....
 
 ## Requirements
