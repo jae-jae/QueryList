@@ -1,4 +1,8 @@
-<center> <img width="150" src="logo.png" alt="awesome"> </center>
+<p align="center">
+  <img width="150" src="logo.png" alt="QueryList">
+  <br>
+  <br>
+</p>
 
 # QueryList  简介
 `QueryList`是一套简洁、优雅、可扩展的PHP采集工具(爬虫)，基于phpQuery。
