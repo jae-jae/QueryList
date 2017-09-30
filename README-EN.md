@@ -9,7 +9,7 @@
 
 ## Features
 - Have the same CSS3 DOM selector as jQuery
-- Have the same DOM operation API as jQuery
+- Have the same DOM manipulation API as jQuery
 - Have a generic list crawling program
 - Have a strong HTTP request suite, easy to achieve such as: simulated landing, forged browser, HTTP proxy and other complex network requests
 - Have a messy code solution
