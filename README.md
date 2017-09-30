@@ -22,6 +22,7 @@
 
 通过插件可以轻松实现诸如：
 - 多线程采集
+- 采集JavaScript动态渲染的页面 (PhantomJS/headless WebKit)
 - 图片本地化
 - 模拟浏览器行为，如：提交Form表单
 - 网络爬虫
@@ -233,7 +234,25 @@ $ql->bind('myHttp',function ($url){
 ```
 
 #### 插件使用
-使用CURL多线程插件,多线程采集GitHub排行榜:
+- 使用PhantomJS插件采集JavaScript动态渲染的页面:
+
+```
+// 安装时设置PhantomJS二级制文件路径 
+$ql = QueryList::use(PhantomJs::class,'/usr/local/bin/phantomjs');
+
+// 采集今日头条手机版
+$data = $ql->browser('https://m.toutiao.com')->find('p')->texts();
+print_r($data->all());
+
+// 使用HTTP代理
+$ql->browser('https://m.toutiao.com',false,[
+	'--proxy' => '192.168.1.42:8080',
+    '--proxy-type' => 'http'
+])
+```
+
+- 使用CURL多线程插件,多线程采集GitHub排行榜:
+
 ```php
 $ql = QueryList::use(CurlMulti::class);
 $ql->curlMulti([
@@ -262,8 +281,10 @@ $ql->curlMulti([
 ```
 
 ## 插件
-- [jae-jae/QueryList-AbsoluteUrl](https://github.com/jae-jae/QueryList-AbsoluteUrl) : 转换URL相对路径到绝对路径
+- [jae-jae/QueryList-PhantomJS](https://github.com/jae-jae/QueryList-PhantomJS): 使用PhantomJS采集JavaScript动态渲染的页面
 - [jae-jae/QueryList-CurlMulti](https://github.com/jae-jae/QueryList-CurlMulti) : Curl多线程采集
+- [jae-jae/QueryList-AbsoluteUrl](https://github.com/jae-jae/QueryList-AbsoluteUrl) : 转换URL相对路径到绝对路径
+
 
 查看更多的QueryList插件和基于QueryList的产品:[QueryList社区力量](https://github.com/jae-jae/QueryList-Community)
 
