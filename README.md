@@ -283,6 +283,8 @@ $ql->curlMulti([
 - [jae-jae/QueryList-PhantomJS](https://github.com/jae-jae/QueryList-PhantomJS):Use PhantomJS to crawl Javascript dynamically rendered page.
 - [jae-jae/QueryList-CurlMulti](https://github.com/jae-jae/QueryList-CurlMulti) : Curl multi threading.
 - [jae-jae/QueryList-AbsoluteUrl](https://github.com/jae-jae/QueryList-AbsoluteUrl) : Converting relative urls to absolute.
+- [jae-jae/QueryList-Rule-Google](https://github.com/jae-jae/QueryList-Rule-Google) : Google searcher.
+- [jae-jae/QueryList-Rule-Baidu](https://github.com/jae-jae/QueryList-Rule-Baidu) : Baidu searcher.
 
 
 View more QueryList plugins and QueryList-based products: [QueryList Community](https://github.com/jae-jae/QueryList-Community)

@@ -284,6 +284,8 @@ $ql->curlMulti([
 - [jae-jae/QueryList-PhantomJS](https://github.com/jae-jae/QueryList-PhantomJS): 使用PhantomJS采集JavaScript动态渲染的页面
 - [jae-jae/QueryList-CurlMulti](https://github.com/jae-jae/QueryList-CurlMulti) : Curl多线程采集
 - [jae-jae/QueryList-AbsoluteUrl](https://github.com/jae-jae/QueryList-AbsoluteUrl) : 转换URL相对路径到绝对路径
+- [jae-jae/QueryList-Rule-Google](https://github.com/jae-jae/QueryList-Rule-Google) : 谷歌搜索引擎
+- [jae-jae/QueryList-Rule-Baidu](https://github.com/jae-jae/QueryList-Rule-Baidu) : 百度搜索引擎
 
 
 查看更多的QueryList插件和基于QueryList的产品:[QueryList社区力量](https://github.com/jae-jae/QueryList-Community)
