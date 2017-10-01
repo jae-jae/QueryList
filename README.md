@@ -4,77 +4,74 @@
   <br>
 </p>
 
-# QueryList  简介
-`QueryList`是一套简洁、优雅、可扩展的PHP采集工具(爬虫)，基于phpQuery。
+# QueryList 
+`QueryList` is a simple, elegant, extensible PHP crawler (spider) ,based on phpQuery.
 
-## 特性
-- 拥有与jQuery完全相同的CSS3 DOM选择器
-- 拥有与jQuery完全相同的DOM操作API
-- 拥有通用的列表采集方案
-- 拥有强大的HTTP请求套件，轻松实现如：模拟登陆、伪造浏览器、HTTP代理等意复杂的网络请求
-- 拥有乱码解决方案
-- 拥有强大的内容过滤功能，可使用jQuey选择器来过滤内容
-- 拥有高度的模块化设计，扩展性强
-- 拥有富有表现力的API
-- 拥有高质量文档
-- 拥有丰富的插件
-- 拥有专业的问答社区和交流群
+[中文文档](README-ZH.md)
 
-通过插件可以轻松实现诸如：
-- 多线程采集
-- 采集JavaScript动态渲染的页面 (PhantomJS/headless WebKit)
-- 图片本地化
-- 模拟浏览器行为，如：提交Form表单
-- 网络爬虫
+## Features
+- Have the same CSS3 DOM selector as jQuery
+- Have the same DOM manipulation API as jQuery
+- Have a generic list crawling program
+- Have a strong HTTP request suite, easy to achieve such as: simulated landing, forged browser, HTTP proxy and other complex network requests
+- Have a messy code solution
+- Have powerful content filtering, you can use the jQuey selector to filter content
+- Has a high degree of modular design, scalability and strong
+- Have an expressive API
+- Has a wealth of plug-ins
+
+Through plug-ins you can easily implement things like:
+- Multithreaded crawl
+- Crawl JavaScript dynamic rendering page (PhantomJS/headless WebKit)
+- Image downloads to local
+- Simulate browser behavior such as submitting Form forms
+- Web crawler
 - .....
 
-## 环境要求
+## Requirements
 - PHP >= 7.0
 
-> 如果你的PHP版本还停留在PHP5，或者不会使用Composer,你可以选择使用QueryList3,QueryList3支持php5.3以及手动安装。
-QueryList3 文档:http://v3.querylist.cc
-
-## 安装
-通过Composer安装:
+## Installation
+By Composer installation:
 ```
 composer require jaeger/querylist
 ```
 
-## 使用
+## Usage
 
-#### 元素操作
--  采集「昵图网」所有图片地址
+#### DOM Traversal and Manipulation
+-  Crawl「GitHub」all picture links
 
 ```php
-QueryList::get('http://www.nipic.com')->find('img')->attrs('src');
+QueryList::get('https://github.com')->find('img')->attrs('src');
 ```
-- 采集百度搜索结果
+- Crawl Google search results
 
 ```php
-$ql = QueryList::get('http://www.baidu.com/s?wd=QueryList');
+$ql = QueryList::get('https://www.google.co.jp/search?q=QueryList');
 
-$ql->find('title')->text(); // 获取网站标题
-$ql->find('meta[name=keywords]')->content; // 获取网站头部关键词
+$ql->find('title')->text(); //The page title
+$ql->find('meta[name=keywords]')->content; //The page keywords
 
-$ql->find('h3>a')->texts(); //获取搜索结果标题列表
-$ql->find('h3>a')->attrs('href'); //获取搜索结果链接列表
+$ql->find('h3>a')->texts(); //Get a list of search results titles
+$ql->find('h3>a')->attrs('href'); //Get a list of search results links
 
-$ql->find('img')->src; //获取第一张图片的链接地址
-$ql->find('img:eq(1)')->src; //获取第二张图片的链接地址
-$ql->find('img')->eq(2)->src; //获取第三张图片的链接地址
-// 遍历所有图片
+$ql->find('img')->src; //Gets the link address of the first image
+$ql->find('img:eq(1)')->src; //Gets the link address of the second image
+$ql->find('img')->eq(2)->src; //Gets the link address of the third image
+// Loop all the images
 $ql->find('img')->map(function($img){
-	echo $img->alt;  //打印图片的alt属性
+	echo $img->alt;  //Print the alt attribute of the image
 });
 ```
-- 更多用法
+- More usage
 
 ```php
-$ql->find('#head')->append('<div>追加内容</div>')->find('div')->htmls();
-$ql->find('.two')->children('img')->attrs('alt'); //获取class为two元素下的所有img孩子节点
-//遍历class为two元素下的所有孩子节点
+$ql->find('#head')->append('<div>Append content</div>')->find('div')->htmls();
+$ql->find('.two')->children('img')->attrs('alt'); // Get the class is the "two" element under all img child nodes
+// Loop class is the "two" element under all child nodes
 $data = $ql->find('.two')->children()->map(function ($item){
-    //用is判断节点类型
+    // Use "is" to determine the node type
     if($item->is('a')){
         return $item->text();
     }elseif($item->is('img'))
@@ -87,11 +84,11 @@ $ql->find('a')->attr('href', 'newVal')->removeClass('className')->html('newHtml'
 $ql->find('div > p')->add('div > ul')->filter(':has(a)')->find('p:first')->nextAll()->andSelf()->...
 $ql->find('div.old')->replaceWith( $ql->find('div.new')->clone())->appendTo('.trash')->prepend('Deleted')->...
 ```
-#### 列表采集
-采集百度搜索结果列表的标题和链接:
+#### List crawl
+Crawl the title and link of the Google search results list:
 ```php
-$data = QueryList::get('http://www.baidu.com/s?wd=QueryList')
-	// 设置采集规则
+$data = QueryList::get('https://www.google.co.jp/search?q=QueryList')
+	// Set the crawl rules
     ->rules([ 
 	    'title'=>array('h3','text'),
 	    'link'=>array('h3>a','href')
@@ -100,60 +97,62 @@ $data = QueryList::get('http://www.baidu.com/s?wd=QueryList')
 
 print_r($data->all());
 ```
-采集结果:
+ Results:
 ```
 Array
 (
     [0] => Array
         (
-            [title] => QueryList|基于phpQuery的无比强大的PHP采集工具
-            [link] => http://www.baidu.com/link?url=GU_YbDT2IHk4ns1tjG2I8_vjmH0SCJEAPuuZN
+            [title] => Angular - QueryList
+            [link] => https://angular.io/api/core/QueryList
         )
     [1] => Array
         (
-            [title] => PHP 用QueryList抓取网页内容 - wb145230 - 博客园
-            [link] => http://www.baidu.com/link?url=zn0DXBnrvIF2ibRVW34KcRVFG1_bCdZvqvwIhUqiXaS
+            [title] => QueryList | @angular/core - Angularリファレンス - Web Creative Park
+            [link] => http://www.webcreativepark.net/angular/querylist/
         )
     [2] => Array
         (
-            [title] => 介绍- QueryList指导文档
-            [link] => http://www.baidu.com/link?url=pSypvMovqS4v2sWeQo5fDBJ4EoYhXYi0Lxx
+            [title] => QueryListにQueryを追加したり、追加されたことを感知する | TIPS ...
+            [link] => http://www.webcreativepark.net/angular/querylist_query_add_subscribe/
         )
         //...
 )
 ```
-#### 编码转换
+#### Encode convert
 ```php
-// 输出编码:UTF-8,输入编码:GB2312
+// Out charset :UTF-8
+// In charset :GB2312
 QueryList::get('https://top.etao.com')->encoding('UTF-8','GB2312')->find('a')->texts();
 
-// 输出编码:UTF-8,输入编码:自动识别
+// Out charset:UTF-8
+// In charset:Automatic Identification
 QueryList::get('https://top.etao.com')->encoding('UTF-8')->find('a')->texts();
 ```
 
-#### HTTP网络操作
-- 携带cookie登录新浪微博
+#### HTTP Client
+- Carry cookie login GitHub
 ```php
-//采集新浪微博需要登录才能访问的页面
-$ql = QueryList::get('http://weibo.com','param1=testvalue & params2=somevalue',[
-    'headers' => [
-        //填写从浏览器获取到的cookie
-        'Cookie' => 'SINAGLOBAL=546064; wb_cmtLike_2112031=1; wvr=6;....'
-    ]
+//Crawl GitHub content
+$ql = QueryList::get('https://github.com','param1=testvalue & params2=somevalue',[
+  'headers' => [
+      // Fill in the cookie from the browser
+      'Cookie' => 'SINAGLOBAL=546064; wb_cmtLike_2112031=1; wvr=6;....'
+  ]
 ]);
 //echo $ql->getHtml();
-echo $ql->find('title')->text();
-//输出: 我的首页 微博-随时随地发现新鲜事
+$userName = $ql->find('.header-nav-current-user>.css-truncate-target')->text();
+echo $userName;
 ```
-- 使用Http代理
+- Use the Http proxy
 ```php
 $urlParams = ['param1' => 'testvalue','params2' => 'somevalue'];
 $opts = [
-	// 设置http代理
+	// Set the http proxy
     'proxy' => 'http://222.141.11.17:8118',
-    //设置超时时间，单位：秒
+    //Set the timeout time in seconds
     'timeout' => 30,
-     // 伪造http头
+     // Fake HTTP headers
     'headers' => [
         'Referer' => 'https://querylist.cc/',
         'User-Agent' => 'testing/1.0',
@@ -166,92 +165,92 @@ $ql->get('http://httpbin.org/get',$urlParams,$opts);
 // echo $ql->getHtml();
 ```
 
-- 模拟登录
+- Analog login
 ```php
-// 用post登录
+// Post login
 $ql = QueryList::post('http://xxxx.com/login',[
     'username' => 'admin',
     'password' => '123456'
 ])->get('http://xxx.com/admin');
-//采集需要登录才能访问的页面
+// Crawl pages that need to be logged in to access
 $ql->get('http://xxx.com/admin/page');
 //echo $ql->getHtml();
 ```
 
-#### Form表单操作
-模拟登陆GitHub
+#### Submit forms
+Login GitHub
 ```php
-// 获取QueryList实例
+// Get the QueryList instance
 $ql = QueryList::getInstance();
-//获取到登录表单
+// Get the login form
 $form = $ql->get('https://github.com/login')->find('form');
 
-//填写GitHub用户名和密码
+// Fill in the GitHub username and password
 $form->find('input[name=login]')->val('your github username or email');
 $form->find('input[name=password]')->val('your github password');
 
-//序列化表单数据
+// Serialize the form data
 $fromData = $form->serializeArray();
 $postData = [];
 foreach ($fromData as $item) {
     $postData[$item['name']] = $item['value'];
 }
 
-//提交登录表单
+// Submit the login form
 $actionUrl = 'https://github.com'.$form->attr('action');
 $ql->post($actionUrl,$postData);
-//判断登录是否成功
+// To determine whether the login is successful
 // echo $ql->getHtml();
 $userName = $ql->find('.header-nav-current-user>.css-truncate-target')->text();
 if($userName)
 {
-    echo '登录成功!欢迎你:'.$userName;
+    echo 'Login successful ! Welcome:'.$userName;
 }else{
-    echo '登录失败!';
+    echo 'Login failed !';
 }
 ```
-#### Bind功能扩展
-自定义扩展一个`myHttp`方法:
+#### Bind function extension
+Customize the extension of a `myHttp` method:
 ```php
 $ql = QueryList::getInstance();
 
-//绑定一个myHttp方法到QueryList对象
+//Bind a `myHttp` method to the QueryList object
 $ql->bind('myHttp',function ($url){
     $html = file_get_contents($url);
     $this->setHtml($html);
     return $this;
 });
 
-//然后就可以通过注册的名字来调用
+// And then you can call by the name of the binding
 $data = $ql->myHttp('https://toutiao.io')->find('h3 a')->texts();
 print_r($data->all());
 ```
-或者把实现体封装到class，然后这样绑定:
+Or package to class, and then bind:
 ```php
 $ql->bind('myHttp',function ($url){
     return new MyHttp($this,$url);
 });
 ```
 
-#### 插件使用
-- 使用PhantomJS插件采集JavaScript动态渲染的页面:
+#### Plugin used
+- Use the PhantomJS plugin to crawl JavaScript dynamically rendered pages:
 
 ```php
-// 安装时设置PhantomJS二进制文件路径 
+// Set the PhantomJS binary file path during installation
 $ql = QueryList::use(PhantomJs::class,'/usr/local/bin/phantomjs');
 
-// 采集今日头条手机版
-$data = $ql->browser('https://m.toutiao.com')->find('p')->texts();
+// Crawl「500px」all picture links
+$data = $ql->browser('https://500px.com/editors')->find('img')->attrs('src');
 print_r($data->all());
 
-// 使用HTTP代理
-$ql->browser('https://m.toutiao.com',false,[
+// Use the HTTP proxy
+$ql->browser('https://500px.com/editors',false,[
 	'--proxy' => '192.168.1.42:8080',
     '--proxy-type' => 'http'
 ])
 ```
 
-- 使用CURL多线程插件,多线程采集GitHub排行榜:
+- Using the CURL multithreading plug-in, multi-threaded crawling GitHub trending :
 
 ```php
 $ql = QueryList::use(CurlMulti::class);
@@ -260,47 +259,41 @@ $ql->curlMulti([
     'https://github.com/trending/go',
     //.....more urls
 ])
- // 每个任务成功完成调用此回调
+ // Called if task is success
  ->success(function (QueryList $ql,CurlMulti $curl,$r){
     echo "Current url:{$r['info']['url']} \r\n";
     $data = $ql->find('h3 a')->texts();
     print_r($data->all());
 })
- // 每个任务失败回调
+ // Task fail callback
 ->error(function ($errorInfo,CurlMulti $curl){
     echo "Current url:{$errorInfo['info']['url']} \r\n";
     print_r($errorInfo['error']);
 })
 ->start([
-	// 最大并发数
+	// Maximum number of threads
     'maxThread' => 10,
-    // 错误重试次数
+    // Number of error retries
     'maxTry' => 3,
 ]);
 
 ```
 
-## 插件
-- [jae-jae/QueryList-PhantomJS](https://github.com/jae-jae/QueryList-PhantomJS): 使用PhantomJS采集JavaScript动态渲染的页面
-- [jae-jae/QueryList-CurlMulti](https://github.com/jae-jae/QueryList-CurlMulti) : Curl多线程采集
-- [jae-jae/QueryList-AbsoluteUrl](https://github.com/jae-jae/QueryList-AbsoluteUrl) : 转换URL相对路径到绝对路径
+## Plugins
+- [jae-jae/QueryList-PhantomJS](https://github.com/jae-jae/QueryList-PhantomJS):Use PhantomJS to crawl Javascript dynamically rendered page.
+- [jae-jae/QueryList-CurlMulti](https://github.com/jae-jae/QueryList-CurlMulti) : Curl multi threading.
+- [jae-jae/QueryList-AbsoluteUrl](https://github.com/jae-jae/QueryList-AbsoluteUrl) : Converting relative urls to absolute.
 
 
-查看更多的QueryList插件和基于QueryList的产品:[QueryList社区力量](https://github.com/jae-jae/QueryList-Community)
+View more QueryList plugins and QueryList-based products: [QueryList Community](https://github.com/jae-jae/QueryList-Community)
 
-## 贡献
-欢迎为QueryList贡献代码。关于贡献插件可以查看:[QueryList插件贡献说明](https://github.com/jae-jae/QueryList-Community/blob/master/CONTRIBUTING.md)
-
-## 寻求帮助?
-- QueryList主页: [http://querylist.cc](http://querylist.cc/)
-- QueryList文档: [http://doc.querylist.cc](http://doc.querylist.cc/)
-- QueryList问答:[http://wenda.querylist.cc](http://wenda.querylist.cc/)
-- QueryList交流QQ群:123266961 <a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=a1b248ae30b3f711bdab4f799df839300dc7fed54331177035efa0513da027f6"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="cafeEX" title="cafeEX"></a>
-- GitHub:https://github.com/jae-jae/QueryList
-- Git@OSC:http://git.oschina.net/jae/QueryList
+## Contributing
+Welcome to contribute code for the QueryList。About Contributing Plugins can be viewed:[QueryList Plugin Contributing Guide](https://github.com/jae-jae/QueryList-Community/blob/master/CONTRIBUTING.md)
 
 ## Author
 Jaeger <JaegerCode@gmail.com>
+
+If this library is useful for you, say thanks [buying me a beer :beer:](https://www.paypal.me/jaepay)!
 
 ## Lisence
 QueryList is licensed under the license of MIT. See the LICENSE for more details.
