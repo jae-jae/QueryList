@@ -5,7 +5,7 @@
 </p>
 
 # QueryList 
-`QueryList` is a simple, elegant, extensible PHP crawler (spider) ,based on phpQuery.
+`QueryList` is a simple, elegant, extensible PHP  Web Scraper (crawler/spider) ,based on phpQuery.
 
 [中文文档](README-ZH.md)
 
