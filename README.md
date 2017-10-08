@@ -130,7 +130,7 @@ QueryList::get('https://top.etao.com')->encoding('UTF-8','GB2312')->find('a')->t
 QueryList::get('https://top.etao.com')->encoding('UTF-8')->find('a')->texts();
 ```
 
-#### HTTP Client
+#### HTTP Client (GuzzleHttp)
 - Carry cookie login GitHub
 ```php
 //Crawl GitHub content
@@ -216,6 +216,7 @@ $ql = QueryList::getInstance();
 
 //Bind a `myHttp` method to the QueryList object
 $ql->bind('myHttp',function ($url){
+	// $this is the current QueryList object
     $html = file_get_contents($url);
     $this->setHtml($html);
     return $this;

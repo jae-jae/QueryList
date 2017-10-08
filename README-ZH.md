@@ -131,7 +131,7 @@ QueryList::get('https://top.etao.com')->encoding('UTF-8','GB2312')->find('a')->t
 QueryList::get('https://top.etao.com')->encoding('UTF-8')->find('a')->texts();
 ```
 
-#### HTTP网络操作
+#### HTTP网络操作（GuzzleHttp）
 - 携带cookie登录新浪微博
 ```php
 //采集新浪微博需要登录才能访问的页面
@@ -217,6 +217,7 @@ $ql = QueryList::getInstance();
 
 //绑定一个myHttp方法到QueryList对象
 $ql->bind('myHttp',function ($url){
+    // $this 为当前的QueryList对象
     $html = file_get_contents($url);
     $this->setHtml($html);
     return $this;
