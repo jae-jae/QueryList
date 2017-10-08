@@ -73,22 +73,41 @@ class QueryList
         $this->destruct();
     }
 
+    /**
+     * Get the QueryList instance
+     *
+     * @return QueryList
+     */
     public static function getInstance()
     {
         $instance = new self();
         return $instance;
     }
 
+    /**
+     * Get the Config instance
+     * @return null|Config
+     */
     public static function config()
     {
         return Config::getInstance();
     }
 
+    /**
+     * Destruction of resources
+     */
     public function destruct()
     {
         phpQuery::$documents = [];
     }
 
+    /**
+     * Bind a custom method to the QueryList object
+     *
+     * @param string $name Invoking the name
+     * @param Closure $provide Called method
+     * @return $this
+     */
     public function bind(string $name,Closure $provide)
     {
         $this->kernel->bind($name,$provide);

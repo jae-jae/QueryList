@@ -167,6 +167,12 @@ class Elements
         return $obj;
     }
 
+    /**
+     * Iterating elements
+     *
+     * @param $callback
+     * @return \Illuminate\Support\Collection
+     */
     public function map($callback)
     {
         $collection = collect();
@@ -176,6 +182,12 @@ class Elements
         return $collection;
     }
 
+    /**
+     * Gets the attributes of all the elements
+     *
+     * @param $attr HTML attribute name
+     * @return \Illuminate\Support\Collection
+     */
     public function attrs($attr)
     {
         return $this->map(function($item) use($attr){
@@ -183,6 +195,11 @@ class Elements
         });
     }
 
+    /**
+     * Gets the text of all the elements
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function texts()
     {
         return $this->map(function($item){
@@ -190,6 +207,11 @@ class Elements
         });
     }
 
+    /**
+     * Gets the html of all the elements
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function htmls()
     {
         return $this->map(function($item){

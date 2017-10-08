@@ -25,12 +25,24 @@ class Config
     }
 
 
+    /**
+     * Get the Config instance
+     *
+     * @return null|Config
+     */
     public static function getInstance()
     {
         self::$instance || self::$instance = new self();
         return self::$instance;
     }
 
+    /**
+     * Global installation plugin
+     *
+     * @param $plugins
+     * @param array ...$opt
+     * @return $this
+     */
     public function use($plugins,...$opt)
     {
         if(is_string($plugins)){
@@ -41,6 +53,13 @@ class Config
         return $this;
     }
 
+    /**
+     * Global binding custom method
+     *
+     * @param string $name
+     * @param Closure $provider
+     * @return $this
+     */
     public function bind(string $name, Closure $provider)
     {
         $this->binds[$name] = $provider;

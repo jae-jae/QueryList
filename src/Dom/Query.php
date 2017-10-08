@@ -30,12 +30,19 @@ class Query
         $this->ql = $ql;
     }
 
-
+    /**
+     * @return mixed
+     */
     public function getHtml()
     {
         return $this->html;
     }
 
+    /**
+     * @param $html
+     * @param null $charset
+     * @return QueryList
+     */
     public function setHtml($html, $charset = null)
     {
         $this->html = value($html);
@@ -43,22 +50,49 @@ class Query
         return $this->ql;
     }
 
+    /**
+     * Get crawl results
+     *
+     * @param Closure|null $callback
+     * @return Collection|static
+     */
     public function getData(Closure $callback = null)
     {
         return  is_null($callback) ? $this->data : $this->data->map($callback);
     }
 
+    /**
+     * @param Collection $data
+     */
     public function setData(Collection $data)
     {
         $this->data = $data;
     }
 
 
+    /**
+     * Searches for all elements that match the specified expression.
+     *
+     * @param $selector A string containing a selector expression to match elements against.
+     * @return Elements
+     */
     public function find($selector)
     {
         return (new Dom($this->document))->find($selector);
     }
 
+    /**
+     * Set crawl rule
+     *
+     * $rules = [
+     *    'rule_name1' => ['selector','HTML attribute | text | html','Tag filter list','callback'],
+     *    'rule_name2' => ['selector','HTML attribute | text | html','Tag filter list','callback'],
+     *    // ...
+     *  ]
+     *
+     * @param array $rules
+     * @return QueryList
+     */
     public function rules(array $rules)
     {
         $this->rules = $rules;
@@ -66,12 +100,23 @@ class Query
     }
 
 
-    public function range($range)
+    /**
+     * Set the slice area for crawl list
+     *
+     * @param $selector
+     * @return QueryList
+     */
+    public function range($selector)
     {
-        $this->range = $range;
+        $this->range = $selector;
         return $this->ql;
     }
 
+    /**
+     * Remove HTML head,try to solve the garbled
+     *
+     * @return QueryList
+     */
     public function removeHead()
     {
         $html = preg_replace('/<head.+?>.+<\/head>/is','<head></head>',$this->html);
@@ -79,6 +124,12 @@ class Query
         return $this->ql;
     }
 
+    /**
+     * Execute the query rule
+     *
+     * @param Closure|null $callback
+     * @return QueryList
+     */
     public function query(Closure $callback = null)
     {
         $this->data = $this->getList();
