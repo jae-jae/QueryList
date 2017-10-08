@@ -1,6 +1,6 @@
 {
     "name": "jaeger/querylist",
-    "description": "QueryList是基于phpQuery的无比强大的PHP采集工具",
+    "description": "Simple, elegant, extensible PHP Web Scraper (crawler/spider),Use the css3 dom selector,Based on phpQuery! 简洁、优雅、可扩展的PHP采集工具(爬虫)，基于phpQuery。",
     "keywords":["QueryList","phpQuery","spider"],
     "homepage": "http://querylist.cc",
     "require": {
@@ -10,7 +10,7 @@
         "jaeger/g-http": "^1.1"
     },
     "suggest":{
-    	"monolog/monolog":"Log support"
+
     },
     "license": "MIT",
     "authors": [
