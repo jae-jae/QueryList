@@ -7,7 +7,7 @@
 # QueryList 
 `QueryList` is a simple, elegant, extensible PHP  Web Scraper (crawler/spider) ,based on phpQuery.
 
-[API Document](https://github.com/jae-jae/QueryList/wiki) 
+[API Documentation](https://github.com/jae-jae/QueryList/wiki) 
 
 [中文文档](README-ZH.md)
 
