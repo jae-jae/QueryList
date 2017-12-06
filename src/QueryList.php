@@ -99,6 +99,8 @@ class QueryList
     public function destruct()
     {
         phpQuery::$documents = [];
+        QueryList::$plugins=[];
+        unset($this->kernel,$this->query);
     }
 
     /**
