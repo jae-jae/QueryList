@@ -27,7 +27,8 @@ class HttpService
     public static function get(QueryList $ql,$url,$args = null,$otherArgs = [])
     {
         $otherArgs = array_merge([
-            'cookies' => self::getCookieJar()
+            'cookies' => self::getCookieJar(),
+            'verify' => false
         ],$otherArgs);
         $html = GHttp::get($url,$args,$otherArgs);
         $ql->setHtml($html);
@@ -37,7 +38,8 @@ class HttpService
     public static function post(QueryList $ql,$url,$args = null,$otherArgs = [])
     {
         $otherArgs = array_merge([
-            'cookies' => self::getCookieJar()
+            'cookies' => self::getCookieJar(),
+            'verify' => false
         ],$otherArgs);
         $html = GHttp::post($url,$args,$otherArgs);
         $ql->setHtml($html);
