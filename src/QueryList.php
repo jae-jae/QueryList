@@ -40,7 +40,7 @@ class QueryList
 {
     protected $query;
     protected $kernel;
-    protected static $plugins = [];
+    protected static $instance = null;
 
     /**
      * QueryList constructor.
@@ -74,14 +74,14 @@ class QueryList
     }
 
     /**
-     * Get the QueryList instance
+     * Get the QueryList single instance
      *
      * @return QueryList
      */
     public static function getInstance()
     {
-        $instance = new self();
-        return $instance;
+        self::$instance || self::$instance = new self();
+        return self::$instance;
     }
 
     /**
