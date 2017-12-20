@@ -26,6 +26,15 @@ class HttpService
 
     public static function get(QueryList $ql,$url,$args = null,$otherArgs = [])
     {
+        //加入disguise_headers的判断
+        if (isset($ql->disguise_headers)) {
+            if (isset($otherArgs['headers']))
+                $headers = array_merge($ql->disguise_headers['headers'],$otherArgs['headers']);
+            else
+                $headers = $ql->disguise_headers['headers'];
+            
+            $otherArgs['headers'] = $headers;
+        }
         $otherArgs = array_merge([
             'cookies' => self::getCookieJar(),
             'verify' => false
@@ -37,6 +46,15 @@ class HttpService
 
     public static function post(QueryList $ql,$url,$args = null,$otherArgs = [])
     {
+        //加入disguise_headers的判断
+        if (isset($ql->disguise_headers)) {
+            if (isset($otherArgs['headers']))
+                $headers = array_merge($ql->disguise_headers['headers'],$otherArgs['headers']);
+            else
+                $headers = $ql->disguise_headers['headers'];
+            
+            $otherArgs['headers'] = $headers;
+        }
         $otherArgs = array_merge([
             'cookies' => self::getCookieJar(),
             'verify' => false
@@ -48,6 +66,15 @@ class HttpService
 
     public static function postJson(QueryList $ql,$url,$args = null,$otherArgs = [])
     {
+        //加入disguise_headers的判断
+        if (isset($ql->disguise_headers)) {
+            if (isset($otherArgs['headers']))
+                $headers = array_merge($ql->disguise_headers['headers'],$otherArgs['headers']);
+            else
+                $headers = $ql->disguise_headers['headers'];
+
+            $otherArgs['headers'] = $headers;
+        }
         $otherArgs = array_merge([
             'cookies' => self::getCookieJar(),
             'verify' => false
