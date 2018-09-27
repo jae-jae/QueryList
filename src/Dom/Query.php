@@ -151,6 +151,11 @@ class Query
                         case 'text':
                             $data[$i][$key] = $this->allowTags(pq($iobj)->html(),$tags);
                             break;
+                        case 'texts':
+                            $data[$i][$key] = array_map(function($e){
+                                return $e->textContent;
+                            }, pq($iobj)->elements);
+                            break;
                         case 'html':
                             $data[$i][$key] = $this->stripTags(pq($iobj)->html(),$tags);
                             break;
