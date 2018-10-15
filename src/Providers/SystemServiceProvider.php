@@ -9,6 +9,7 @@ namespace QL\Providers;
 
 use QL\Contracts\ServiceProviderContract;
 use QL\Kernel;
+use Closure;
 
 class SystemServiceProvider implements ServiceProviderContract
 {
@@ -17,6 +18,10 @@ class SystemServiceProvider implements ServiceProviderContract
         $kernel->bind('html',function (...$args){
             $this->setHtml(...$args);
             return $this;
+        });
+
+        $kernel->bind('queryData',function (Closure $callback = null){
+            return $this->query()->getData($callback)->all();
         });
 
     }

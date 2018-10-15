@@ -30,6 +30,7 @@ use Closure;
  * @method QueryList removeHead()
  * @method QueryList query(Closure $callback = null)
  * @method Collection getData(Closure $callback = null)
+ * @method Array queryData(Closure $callback = null)
  * @method QueryList setData(Collection $data)
  * @method QueryList encoding(string $outputEncoding,string $inputEncoding = null)
  * @method QueryList get($url,$args = null,$otherArgs = [])
