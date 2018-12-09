@@ -24,7 +24,13 @@
             "QL\\":"src"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "require-dev": {
-        "symfony/var-dumper": "^3.3"
+        "symfony/var-dumper": "^3.3",
+        "phpunit/phpunit": "^7.5"
     }
 }
