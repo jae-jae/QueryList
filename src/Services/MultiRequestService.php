@@ -12,6 +12,14 @@ namespace QL\Services;
 use Jaeger\GHttp;
 use Closure;
 
+/**
+ * Class MultiRequestService
+ * @package QL\Services
+ *
+ * @method MultiRequestService withHeaders($headers)
+ * @method MultiRequestService withOptions($options)
+ * @method MultiRequestService concurrency($concurrency)
+ */
 class MultiRequestService
 {
     protected $ql;
@@ -40,5 +48,15 @@ class MultiRequestService
         return $this->multiRequest->error(function($reason, $index) use($error){
             $error($this->ql,$reason, $index);
         });
+    }
+
+    public function sendGet()
+    {
+        $this->multiRequest->get();
+    }
+
+    public function sendPost()
+    {
+        $this->multiRequest->post();
     }
 }

@@ -30,4 +30,12 @@ class HttpTest extends TestCaseBase
         ]);
         $this->assertEquals((string)$mock->getLastRequest()->getBody(),json_encode($data));
     }
+
+    /**
+     * @test
+     */
+    public function concurrent_requests()
+    {
+        
+    }
 }
