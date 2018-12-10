@@ -7,7 +7,7 @@
 
 namespace QL\Dom;
 
-use Illuminate\Support\Collection;
+use Tightenco\Collect\Support\Collection;
 use phpQuery;
 use QL\QueryList;
 use Closure;

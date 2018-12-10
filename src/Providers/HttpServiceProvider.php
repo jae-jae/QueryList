@@ -11,6 +11,7 @@ namespace QL\Providers;
 use QL\Contracts\ServiceProviderContract;
 use QL\Kernel;
 use QL\Services\HttpService;
+use QL\Services\MultiRequestService;
 
 class HttpServiceProvider implements ServiceProviderContract
 {
@@ -26,6 +27,10 @@ class HttpServiceProvider implements ServiceProviderContract
 
         $kernel->bind('postJson',function (...$args){
             return HttpService::postJson($this,...$args);
+        });
+
+        $kernel->bind('multiRequest',function (...$args){
+            return new MultiRequestService($this,...$args);
         });
     }
 }
