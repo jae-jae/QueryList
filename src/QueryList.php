@@ -38,7 +38,8 @@ use QL\Services\MultiRequestService;
  * @method QueryList get($url,$args = null,$otherArgs = [])
  * @method QueryList post($url,$args = null,$otherArgs = [])
  * @method QueryList postJson($url,$args = null,$otherArgs = [])
- * @method MultiRequestService multiRequest($urls)
+ * @method MultiRequestService multiGet($urls)
+ * @method MultiRequestService multiPost($urls)
  * @method QueryList use($plugins,...$opt)
  * @method QueryList pipe(Closure $callback = null)
  */

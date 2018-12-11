@@ -29,8 +29,12 @@ class HttpServiceProvider implements ServiceProviderContract
             return HttpService::postJson($this,...$args);
         });
 
-        $kernel->bind('multiRequest',function (...$args){
-            return new MultiRequestService($this,...$args);
+        $kernel->bind('multiGet',function (...$args){
+            return new MultiRequestService($this,'get',...$args);
+        });
+
+        $kernel->bind('multiPost',function (...$args){
+            return new MultiRequestService($this,'post',...$args);
         });
     }
 }

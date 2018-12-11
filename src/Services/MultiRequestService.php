@@ -11,6 +11,9 @@ namespace QL\Services;
 
 use Jaeger\GHttp;
 use Closure;
+use GuzzleHttp\Psr7\Response;
+use QL\QueryList;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Class MultiRequestService
@@ -24,39 +27,40 @@ class MultiRequestService
 {
     protected $ql;
     protected $multiRequest;
-    public function __construct($ql,$urls)
+    protected $method;
+
+    public function __construct(QueryList $ql,$method,$urls)
     {
         $this->ql = $ql;
+        $this->method = $method;
         $this->multiRequest = GHttp::multiRequest($urls);
     }
 
     public function __call($name, $arguments)
     {
-        return $this->multiRequest->$name(...$arguments);
+        $this->multiRequest = $this->multiRequest->$name(...$arguments);
+        return $this;
     }
 
     public function success(Closure $success)
     {
-       return $this->multiRequest->success(function($response, $index) use($success){
+        $this->multiRequest = $this->multiRequest->success(function(Response $response, $index) use($success){
            $this->ql->setHtml((String)$response->getBody());
            $success($this->ql,$response, $index);
        });
+        return $this;
     }
 
     public function error(Closure $error)
     {
-        return $this->multiRequest->error(function($reason, $index) use($error){
+        $this->multiRequest = $this->multiRequest->error(function(RequestException $reason, $index) use($error){
             $error($this->ql,$reason, $index);
         });
+        return $this;
     }
 
-    public function sendGet()
+    public function send()
     {
-        $this->multiRequest->get();
-    }
-
-    public function sendPost()
-    {
-        $this->multiRequest->post();
+        $this->multiRequest->{$this->method}();
     }
 }
