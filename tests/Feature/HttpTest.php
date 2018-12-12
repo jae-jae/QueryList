@@ -85,4 +85,19 @@ class HttpTest extends TestCaseBase
             })
             ->send();
     }
+
+    /**
+     * @test
+     */
+    public function request_with_cache()
+    {
+        $url = $this->urls[0];
+        $data = QueryList::get($url,null,[
+            'cache' => sys_get_temp_dir(),
+            'cache_ttl' => 600
+        ])->getHtml();
+        $data = json_decode($data,true);
+        $this->assertEquals($url,$data['url']);
+
+    }
 }
