@@ -5,6 +5,8 @@
 </p>
 
 # QueryList 
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjae-jae%2FQueryList.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjae-jae%2FQueryList?ref=badge_shield)
+
 `QueryList` is a simple, elegant, extensible PHP  Web Scraper (crawler/spider) ,based on phpQuery.
 
 [API Documentation](https://github.com/jae-jae/QueryList/wiki) 
@@ -302,3 +304,6 @@ If this library is useful for you, say thanks [buying me a beer :beer:](https://
 
 ## Lisence
 QueryList is licensed under the license of MIT. See the LICENSE for more details.
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjae-jae%2FQueryList.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjae-jae%2FQueryList?ref=badge_large)
