@@ -15,6 +15,9 @@ use Closure;
 class Query
 {
     protected $html;
+    /**
+     * @var \phpQueryObject
+     */
     protected $document;
     protected $rules;
     protected $range = null;
@@ -267,5 +270,16 @@ class Query
             $doc->unloadDocument();
         }
         return $html;
+    }
+
+    protected function destroyDocument()
+    {
+        $this->document->unloadDocument();
+        unset($this->document);
+    }
+
+    public function __destruct()
+    {
+        $this->destroyDocument();
     }
 }
