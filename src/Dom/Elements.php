@@ -114,7 +114,7 @@ use phpQueryObject;
  * @method Elements removeClass($className)
  * @method Elements toggleClass($className)
  * @method Elements _empty()
- * @method Elements each($callback,$param1,$param2,$param3)
+ * @method Elements each($callback,$param1=null,$param2=null,$param3=null)
  * @method Elements callback($callback,$param1,$param2,$param3)
  * @method  data($key,$value)
  * @method  removeData($key)

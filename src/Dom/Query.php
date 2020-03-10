@@ -140,65 +140,111 @@ class Query
     protected function getList()
     {
         $data = [];
-        if (!empty($this->range)) {
-            $robj = $this->document->find($this->range);
+
+        if ( ! empty($this->range)) {
+
+            $elements = $this->find($this->range);
+
             $i = 0;
-            foreach ($robj as $item) {
-                foreach ($this->rules as $key => $reg_value){
-                    $tags = $reg_value[2] ?? '';
-                    $iobj = pq($item,$this->document)->find($reg_value[0]);
-                    switch ($reg_value[1]) {
-                        case 'text':
-                            $data[$i][$key] = $this->allowTags(pq($iobj)->html(),$tags);
-                            break;
-                        case 'html':
-                            $data[$i][$key] = $this->stripTags(pq($iobj)->html(),$tags);
-                            break;
-                        case 'outerHTML':
-                            $data[$i][$key] = $this->stripTags(pq($iobj)->htmlOuter(),$tags);
-                            break;
-                        default:
-                            $data[$i][$key] = pq($iobj)->attr($reg_value[1]);
-                            break;
-                    }
 
-                    if(isset($reg_value[3])){
-                        $data[$i][$key] = call_user_func($reg_value[3],$data[$i][$key],$key);
-                    }
+            $elements->map((function (Elements $element) use (&$data, &$i) {
+
+                foreach ($this->rules as $key => $reg_value) {
+
+                    [$selector, $attr, $elementCallback, $htmlCallback, $tags] = $this->getRulesParams($reg_value);
+
+                    $this->extractElements($element->find($selector), $elementCallback)
+                         ->map((function (Elements $element) use ($attr, $tags, $htmlCallback, $key, &$i, &$data) {
+
+                             $data[$i][$key] = $this->extractString($element, $attr, $tags, $htmlCallback, $key);
+
+                         })->bindTo($this));
                 }
+
                 $i++;
-            }
+
+            })->bindTo($this));
+
         } else {
-            foreach ($this->rules as $key => $reg_value){
-                $tags = $reg_value[2] ?? '';
-                $lobj = $this->document->find($reg_value[0]);
+            foreach ($this->rules as $key => $reg_value) {
+
                 $i = 0;
-                foreach ($lobj as $item) {
-                    switch ($reg_value[1]) {
-                        case 'text':
-                            $data[$i][$key] = $this->allowTags(pq($item,$this->document)->html(),$tags);
-                            break;
-                        case 'html':
-                            $data[$i][$key] = $this->stripTags(pq($item,$this->document)->html(),$tags);
-                            break;
-                        case 'outerHTML':
-                            $data[$i][$key] = $this->stripTags(pq($item,$this->document)->htmlOuter(),$tags);
-                            break;
-                        default:
-                            $data[$i][$key] = pq($item,$this->document)->attr($reg_value[1]);
-                            break;
-                    }
 
-                    if(isset($reg_value[3])){
-                        $data[$i][$key] = call_user_func($reg_value[3],$data[$i][$key],$key);
-                    }
+                [$selector, $attr, $elementCallback, $htmlCallback, $tags] = $this->getRulesParams($reg_value);
 
-                    $i++;
-                }
+                $this->extractElements($this->find($selector), $elementCallback)
+                     ->map((function (Elements $element) use ($attr, $tags, $htmlCallback, $key, &$i, &$data) {
+
+                         $data[$i][$key] = $this->extractString($element, $attr, $tags, $htmlCallback, $key);
+
+                         $i++;
+
+                     })->bindTo($this));
+
+
             }
         }
-//        phpQuery::$documents = array();
+
+        //        phpQuery::$documents = array();
         return collect($data);
+    }
+
+    protected function getRulesParams(array $reg_value)
+    {
+
+        $selector = $reg_value[0];
+        $attr     = $reg_value[1] ?? '';
+        if (isset($reg_value[2]) && $reg_value[2] instanceof Closure) {
+            $elementCallback = $reg_value[2];
+            $tags            = '';
+        } else {
+            $elementCallback = null;
+            $tags            = $reg_value[2] ?? '';
+        }
+        $htmlCallback = $reg_value[3] ?? null;
+
+        return [$selector, $attr, $elementCallback, $htmlCallback, $tags];
+    }
+
+    /**
+     * @param  \QL\Dom\Elements  $elements
+     * @param  \Closure|null  $handle
+     *
+     * @return \QL\Dom\Elements
+     */
+    protected function extractElements(Elements $elements, Closure $handle = null)
+    {
+        return $elements->each(function (&$dom) use ($handle) {
+
+            if ($handle) {
+                /* @var \QL\Dom\Elements $element */
+                $element = call_user_func($handle, new Elements(pq($dom)));
+                $dom     = $element->getDOMDocument();
+            }
+
+        });
+    }
+
+    protected function extractString(Elements $element, string $attr, string $tags = '', Closure $handle = null, $key = '')
+    {
+
+        switch ($attr) {
+            case 'text':
+                $html = $this->allowTags($element->html(), $tags);
+                break;
+            case 'html':
+                $html = $this->stripTags($element->html(), $tags);
+                break;
+            case 'outerHTML':
+                $html = $this->stripTags($element->htmlOuter(), $tags);
+                break;
+            default:
+                $html = $element->attr($attr);
+                break;
+        }
+
+        return $handle ? call_user_func($handle, $html, $key) : $html;
+
     }
 
     /**
