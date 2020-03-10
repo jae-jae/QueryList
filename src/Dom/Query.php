@@ -142,50 +142,31 @@ class Query
         $data = [];
 
         if ( ! empty($this->range)) {
-
-            $elements = $this->find($this->range);
-
-            $i = 0;
-
-            $elements->map((function (Elements $element) use (&$data, &$i) {
-
-                foreach ($this->rules as $key => $reg_value) {
-
-                    [$selector, $attr, $elementCallback, $htmlCallback, $tags] = $this->getRulesParams($reg_value);
-
-                    $this->extractElements($element->find($selector), $elementCallback)
-                         ->map((function (Elements $element) use ($attr, $tags, $htmlCallback, $key, &$i, &$data) {
-
-                             $data[$i][$key] = $this->extractString($element, $attr, $tags, $htmlCallback, $key);
-
-                         })->bindTo($this));
-                }
-
-                $i++;
-
-            })->bindTo($this));
-
+            $root = $this->find($this->range);
         } else {
-            foreach ($this->rules as $key => $reg_value) {
+            $root = new Elements($this->document);
+        }
 
-                $i = 0;
+        $i = 0;
+
+        $root->map((function (Elements $element) use (&$data, &$i) {
+
+            foreach ($this->rules as $key => $reg_value) {
 
                 [$selector, $attr, $elementCallback, $htmlCallback, $tags] = $this->getRulesParams($reg_value);
 
-                $this->extractElements($this->find($selector), $elementCallback)
+                $this->extractElements($element->find($selector), $elementCallback)
                      ->map((function (Elements $element) use ($attr, $tags, $htmlCallback, $key, &$i, &$data) {
 
-                         $data[$i][$key] = $this->extractString($element, $attr, $tags, $htmlCallback, $key);
-
-                         $i++;
+                         $data[$i][$key] .= $this->extractString($element, $attr, $tags, $htmlCallback, $key);
 
                      })->bindTo($this));
-
-
             }
-        }
 
-        //        phpQuery::$documents = array();
+            $i++;
+
+        })->bindTo($this));
+
         return collect($data);
     }
 
