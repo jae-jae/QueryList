@@ -7,6 +7,7 @@
 
 namespace QL\Dom;
 
+use phpDocumentor\Reflection\Types\Null_;
 use phpQueryObject;
 
 /**
@@ -64,10 +65,10 @@ use phpQueryObject;
  * @method Elements remove($selector=null)
  * @method Elements|string markup($markup=null,$callback1=null,$callback2=null,$callback3=null)
  * @method string markupOuter($callback1=null,$callback2=null,$callback3=null)
- * @method Elements|string html($html,$callback1,$callback2,$callback3)
- * @method Elements|string xml($xml,$callback1,$callback2,$callback3)
- * @method string htmlOuter($callback1,$callback2,$callback3)
- * @method string xmlOuter($callback1,$callback2,$callback3)
+ * @method Elements|string html($html=null,$callback1=null,$callback2=null,$callback3=null)
+ * @method Elements|string xml($xml=null,$callback1=null,$callback2=null,$callback3=null)
+ * @method string htmlOuter($callback1=null,$callback2=null,$callback3=null)
+ * @method string xmlOuter($callback1=null,$callback2=null,$callback3=null)
  * @method Elements php($code)
  * @method string markupPHP($code)
  * @method string markupOuterPHP()
