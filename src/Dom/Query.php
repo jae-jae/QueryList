@@ -214,7 +214,7 @@ class Query
      */
     protected function extractElements(Elements $elements, Closure $handle = null)
     {
-        return $elements->each(function (&$dom) use ($handle) {
+        return $elements->each(function ($dom) use ($handle) {
 
             if ($handle) {
                 /* @var \QL\Dom\Elements $element */
