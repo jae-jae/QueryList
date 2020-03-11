@@ -229,30 +229,26 @@ class Query
      * @param  \QL\Dom\Elements  $element
      * @param  string  $attr
      * @param  string  $tags
-     * @param  \Closure|null  $handle
-     * @param  string  $key
      *
      * @return string
      */
-    protected function extractString(Elements $element, string $attr, string $tags = '', Closure $handle = null, $key = '')
+    protected function extractString(Elements $element, string $attr, string $tags = '')
     {
 
         switch ($attr) {
             case 'text':
-                $html = $this->allowTags($element->html(), $tags);
+                return $this->allowTags($element->html(), $tags);
                 break;
             case 'html':
-                $html = $this->stripTags($element->html(), $tags);
+                return $this->stripTags($element->html(), $tags);
                 break;
             case 'outerHTML':
-                $html = $this->stripTags($element->htmlOuter(), $tags);
+                return $this->stripTags($element->htmlOuter(), $tags);
                 break;
             default:
-                $html = $element->attr($attr);
+                return $element->attr($attr);
                 break;
         }
-
-        return $handle ? call_user_func($handle, $html, $key) : $html;
 
     }
 
