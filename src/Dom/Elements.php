@@ -7,41 +7,42 @@
 
 namespace QL\Dom;
 
+use phpDocumentor\Reflection\Types\Null_;
 use phpQueryObject;
 
 /**
  * Class Elements
  * @package QL\Dom
  *
- * @method Elements toReference($var)
- * @method  documentFragment($state)
+ * @method Elements toReference(&$var)
+ * @method Elements documentFragment($state=null)
  * @method Elements toRoot()
- * @method Elements getDocumentIDRef($documentID)
+ * @method Elements getDocumentIDRef(&$documentID)
  * @method Elements getDocument()
- * @method  getDOMDocument()
+ * @method \DOMDocument getDOMDocument()
  * @method Elements getDocumentID()
  * @method Elements unloadDocument()
- * @method  isHTML()
- * @method  isXHTML()
- * @method  isXML()
- * @method  serialize()
- * @method  serializeArray($submit)
- * @method  get($index,$callback1,$callback2,$callback3)
- * @method  getString($index,$callback1,$callback2,$callback3)
- * @method  getStrings($index,$callback1,$callback2,$callback3)
- * @method  newInstance($newStack)
- * @method Elements find($selectors,$context,$noHistory)
- * @method Elements is($selector,$nodes)
- * @method Elements filterCallback($callback,$_skipHistory)
- * @method Elements filter($selectors,$_skipHistory)
- * @method  load($url,$data,$callback)
- * @method Elements trigger($type,$data)
- * @method Elements triggerHandler($type,$data)
- * @method Elements bind($type,$data,$callback)
- * @method  unbind($type,$callback)
- * @method Elements change($callback)
- * @method Elements submit($callback)
- * @method Elements click($callback)
+ * @method bool isHTML()
+ * @method bool isXHTML()
+ * @method bool isXML()
+ * @method string serialize()
+ * @method array serializeArray($submit=null)
+ * @method \DOMElement|\DOMElement[] get($index=null,$callback1=null,$callback2=null,$callback3=null)
+ * @method string|array getString($index=null,$callback1=null,$callback2=null,$callback3=null)
+ * @method string|array getStrings($index=null,$callback1=null,$callback2=null,$callback3=null)
+ * @method Elements newInstance($newStack=null)
+ * @method Elements find($selectors,$context=null,$noHistory=false)
+ * @method Elements|bool is($selector,$nodes=null)
+ * @method Elements filterCallback($callback,$_skipHistory=false)
+ * @method Elements filter($selectors,$_skipHistory=false)
+ * @method Elements load($url,$data=null,$callback=null)
+ * @method Elements trigger($type,$data=[])
+ * @method Elements triggerHandler($type,$data=[])
+ * @method Elements bind($type,$data,$callback=null)
+ * @method Elements unbind($type=null,$callback=null)
+ * @method Elements change($callback=null)
+ * @method Elements submit($callback=null)
+ * @method Elements click($callback=null)
  * @method Elements wrapAllOld($wrapper)
  * @method Elements wrapAll($wrapper)
  * @method Elements wrapAllPHP($codeBefore,$codeAfter)
@@ -51,26 +52,26 @@ use phpQueryObject;
  * @method Elements wrapInnerPHP($codeBefore,$codeAfter)
  * @method Elements contents()
  * @method Elements contentsUnwrap()
- * @method  switchWith($markup)
+ * @method Elements switchWith($markup)
  * @method Elements eq($num)
  * @method Elements size()
  * @method Elements length()
- * @method  count()
- * @method Elements end($level)
+ * @method int count()
+ * @method Elements end($level=1)
  * @method Elements _clone()
  * @method Elements replaceWithPHP($code)
  * @method Elements replaceWith($content)
  * @method Elements replaceAll($selector)
- * @method Elements remove($selector)
- * @method  markup($markup,$callback1,$callback2,$callback3)
- * @method  markupOuter($callback1,$callback2,$callback3)
- * @method  html($html,$callback1,$callback2,$callback3)
- * @method  xml($xml,$callback1,$callback2,$callback3)
- * @method  htmlOuter($callback1,$callback2,$callback3)
- * @method  xmlOuter($callback1,$callback2,$callback3)
+ * @method Elements remove($selector=null)
+ * @method Elements|string markup($markup=null,$callback1=null,$callback2=null,$callback3=null)
+ * @method string markupOuter($callback1=null,$callback2=null,$callback3=null)
+ * @method Elements|string html($html=null,$callback1=null,$callback2=null,$callback3=null)
+ * @method Elements|string xml($xml=null,$callback1=null,$callback2=null,$callback3=null)
+ * @method string htmlOuter($callback1=null,$callback2=null,$callback3=null)
+ * @method string xmlOuter($callback1=null,$callback2=null,$callback3=null)
  * @method Elements php($code)
- * @method  markupPHP($code)
- * @method  markupOuterPHP()
+ * @method string markupPHP($code)
+ * @method string markupOuterPHP()
  * @method Elements children($selector)
  * @method Elements ancestors($selector)
  * @method Elements append($content)
@@ -86,52 +87,50 @@ use phpQueryObject;
  * @method Elements afterPHP($content)
  * @method Elements insertAfter($seletor)
  * @method Elements insert($target,$type)
- * @method  index($subject)
- * @method Elements slice($start,$end)
+ * @method int index($subject)
+ * @method Elements slice($start,$end=null)
  * @method Elements reverse()
- * @method  text($text,$callback1,$callback2,$callback3)
- * @method Elements plugin($class,$file)
- * @method  extend($class,$file)
- * @method Elements _next($selector)
- * @method Elements _prev($selector)
- * @method Elements prev($selector)
- * @method Elements prevAll($selector)
- * @method Elements nextAll($selector)
- * @method Elements siblings($selector)
- * @method Elements not($selector)
- * @method Elements add($selector)
- * @method Elements parent($selector)
- * @method Elements parents($selector)
- * @method  stack($nodeTypes)
- * @method  attr($attr,$value)
+ * @method Elements|string text($text=null,$callback1=null,$callback2=null,$callback3=null)
+ * @method Elements plugin($class,$file=null)
+ * @method Elements _next($selector=null)
+ * @method Elements _prev($selector=null)
+ * @method Elements prev($selector=null)
+ * @method Elements prevAll($selector=null)
+ * @method Elements nextAll($selector=null)
+ * @method Elements siblings($selector=null)
+ * @method Elements not($selector=null)
+ * @method Elements add($selector=null)
+ * @method Elements parent($selector=null)
+ * @method Elements parents($selector=null)
+ * @method Elements stack($nodeTypes=null)
+ * @method Elements|string attr($attr=null,$value=null)
  * @method Elements attrPHP($attr,$code)
  * @method Elements removeAttr($attr)
- * @method  val($val)
+ * @method Elements|string val($val=null)
  * @method Elements andSelf()
  * @method Elements addClass($className)
  * @method Elements addClassPHP($className)
- * @method  hasClass($className)
+ * @method bool hasClass($className)
  * @method Elements removeClass($className)
  * @method Elements toggleClass($className)
  * @method Elements _empty()
- * @method Elements each($callback,$param1,$param2,$param3)
- * @method Elements callback($callback,$param1,$param2,$param3)
- * @method  data($key,$value)
- * @method  removeData($key)
- * @method  rewind()
- * @method  current()
- * @method  key()
- * @method Elements next($cssSelector)
- * @method  valid()
- * @method  offsetExists($offset)
- * @method  offsetGet($offset)
- * @method  offsetSet($offset,$value)
- * @method  offsetUnset($offset)
- * @method  whois($oneNode)
+ * @method Elements each($callback,$param1=null,$param2=null,$param3=null)
+ * @method Elements callback($callback,$param1=null,$param2=null,$param3=null)
+ * @method string data($key,$value=null)
+ * @method Elements removeData($key)
+ * @method void rewind()
+ * @method Elements current()
+ * @method int key()
+ * @method Elements next($cssSelector=null)
+ * @method bool valid()
+ * @method bool offsetExists($offset)
+ * @method Elements offsetGet($offset)
+ * @method void offsetSet($offset,$value)
+ * @method string whois($oneNode)
  * @method Elements dump()
- * @method  dumpWhois()
- * @method  dumpLength()
- * @method  dumpTree($html,$title)
+ * @method Elements dumpWhois()
+ * @method Elements dumpLength()
+ * @method Elements dumpTree($html,$title)
  * @method  dumpDie()
  */
 
@@ -171,7 +170,7 @@ class Elements
      * Iterating elements
      *
      * @param $callback
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection|\Tightenco\Collect\Support\Collection
      */
     public function map($callback)
     {
@@ -186,7 +185,7 @@ class Elements
      * Gets the attributes of all the elements
      *
      * @param $attr HTML attribute name
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection|\Tightenco\Collect\Support\Collection
      */
     public function attrs($attr)
     {
@@ -198,7 +197,7 @@ class Elements
     /**
      * Gets the text of all the elements
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection|\Tightenco\Collect\Support\Collection
      */
     public function texts()
     {
@@ -210,7 +209,7 @@ class Elements
     /**
      * Gets the html of all the elements
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection|\Tightenco\Collect\Support\Collection
      */
     public function htmls()
     {

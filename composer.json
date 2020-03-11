@@ -7,7 +7,8 @@
         "PHP":">=7.0",
         "jaeger/phpquery-single": "^1",
         "tightenco/collect": "^5",
-        "jaeger/g-http": "^1.1"
+        "jaeger/g-http": "^1.1",
+        "ext-dom": "*"
     },
     "suggest":{
 
