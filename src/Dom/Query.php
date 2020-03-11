@@ -240,6 +240,7 @@ class Query
                 return $this->allowTags($element->html(), $tags);
                 break;
             case 'html':
+            case 'innerHTML':
                 return $this->stripTags($element->html(), $tags);
                 break;
             case 'outerHTML':
