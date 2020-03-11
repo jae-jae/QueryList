@@ -163,8 +163,10 @@ class Query
                               })->bindTo($this));
 
                 if ($htmlCallback) {
+                    // 如果有用户定义的 htmlCallback，则交由 htmlCallback 处理。注意参数 $htmls 为 Collection
                     $data[$i][$key] = call_user_func($htmlCallback, $htmls, $key);
                 } else {
+                    // 否则默认以空格合并成单条 string
                     $data[$i][$key] = $htmls->join(' ');
                 }
             }
@@ -176,6 +178,13 @@ class Query
         return collect($data);
     }
 
+    /**
+     * 通过 rules 的 value 获取参数
+     *
+     * @param  array  $reg_value
+     *
+     * @return array [$selector, $attr, $elementCallback, $htmlCallback, $tags]
+     */
     protected function getRulesParams(array $reg_value)
     {
 
@@ -194,6 +203,8 @@ class Query
     }
 
     /**
+     * 处理查找到的 Elements
+     *
      * @param  \QL\Dom\Elements  $elements
      * @param  \Closure|null  $handle
      *
@@ -212,6 +223,17 @@ class Query
         });
     }
 
+    /**
+     * 从 Element 中提取 HTML string
+     *
+     * @param  \QL\Dom\Elements  $element
+     * @param  string  $attr
+     * @param  string  $tags
+     * @param  \Closure|null  $handle
+     * @param  string  $key
+     *
+     * @return string
+     */
     protected function extractString(Elements $element, string $attr, string $tags = '', Closure $handle = null, $key = '')
     {
 
