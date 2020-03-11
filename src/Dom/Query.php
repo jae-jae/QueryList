@@ -155,12 +155,18 @@ class Query
 
                 [$selector, $attr, $elementCallback, $htmlCallback, $tags] = $this->getRulesParams($reg_value);
 
-                $this->extractElements($element->find($selector), $elementCallback)
-                     ->map((function (Elements $element) use ($attr, $tags, $htmlCallback, $key, &$i, &$data) {
+                $htmls = $this->extractElements($element->find($selector), $elementCallback)
+                              ->map((function (Elements $element) use ($attr, $tags) {
 
-                         $data[$i][$key] .= $this->extractString($element, $attr, $tags, $htmlCallback, $key);
+                                  return $this->extractString($element, $attr, $tags);
 
-                     })->bindTo($this));
+                              })->bindTo($this));
+
+                if ($htmlCallback) {
+                    $data[$i][$key] = call_user_func($htmlCallback, $htmls, $key);
+                } else {
+                    $data[$i][$key] = $htmls->join(' ');
+                }
             }
 
             $i++;
