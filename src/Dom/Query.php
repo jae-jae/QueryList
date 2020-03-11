@@ -237,20 +237,21 @@ class Query
 
         switch ($attr) {
             case 'text':
-                return $this->allowTags($element->html(), $tags);
+                $html = $this->allowTags($element->html(), $tags);
                 break;
             case 'html':
             case 'innerHTML':
-                return $this->stripTags($element->html(), $tags);
+                $html = $this->stripTags($element->html(), $tags);
                 break;
             case 'outerHTML':
-                return $this->stripTags($element->htmlOuter(), $tags);
+                $html = $this->stripTags($element->htmlOuter(), $tags);
                 break;
             default:
-                return $element->attr($attr);
+                $html = $element->attr($attr);
                 break;
         }
 
+        return $html ?: '';
     }
 
     /**
