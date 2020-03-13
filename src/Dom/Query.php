@@ -9,6 +9,7 @@ namespace QL\Dom;
 
 use Tightenco\Collect\Support\Collection;
 use phpQuery;
+use phpQueryObject;
 use QL\QueryList;
 use Closure;
 
@@ -49,6 +50,7 @@ class Query
     public function setHtml($html, $charset = null)
     {
         $this->html = value($html);
+        $this->destroyDocument();
         $this->document = phpQuery::newDocumentHTML($this->html,$charset);
         return $this->ql;
     }
@@ -274,8 +276,9 @@ class Query
 
     protected function destroyDocument()
     {
-        $this->document->unloadDocument();
-        unset($this->document);
+        if($this->document instanceof phpQueryObject) {
+            $this->document->unloadDocument();
+        }
     }
 
     public function __destruct()
