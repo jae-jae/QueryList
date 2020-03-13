@@ -203,7 +203,7 @@ class Query
                 break;
         }
 
-        if(isset($reg_value[3])){
+        if($rule['handle_callback']){
             $content = call_user_func($rule['handle_callback'], $content, $ruleName);
         }
 
