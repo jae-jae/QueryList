@@ -159,6 +159,9 @@ class Query
                         case 'html':
                             $data[$i][$key] = $this->stripTags(pq($iobj)->html(),$tags);
                             break;
+                        case 'htmlOuter':
+                            $data[$i][$key] = $this->stripTags(pq($iobj)->htmlOuter(),$tags);
+                            break;
                         default:
                             $data[$i][$key] = pq($iobj)->attr($reg_value[1]);
                             break;
@@ -182,6 +185,9 @@ class Query
                             break;
                         case 'html':
                             $data[$i][$key] = $this->stripTags(pq($item,$this->document)->html(),$tags);
+                            break;
+                        case 'htmlOuter':
+                            $data[$i][$key] = $this->stripTags(pq($item,$this->document)->htmlOuter(),$tags);
                             break;
                         default:
                             $data[$i][$key] = pq($item,$this->document)->attr($reg_value[1]);
