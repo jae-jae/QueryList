@@ -169,6 +169,34 @@ class Elements
     /**
      * Iterating elements
      *
+     * @param  callable  $callback
+     *
+     * @return $this
+     */
+    public function each(callable $callback)
+    {
+        $break = false;
+        $this->elements->each(function ($dom) use ($callback, &$break) {
+            if ( ! $dom || $break) {
+                return;
+            }
+            $orig = $dom;
+            $dom  = new Elements(pq($dom));
+            if (false === call_user_func($callback, $dom)) {
+                $dom = $orig;
+                $break = true;
+            } else {
+                $dom = $dom->getDOMDocument();
+            }
+            unset($orig);
+        });
+
+        return $this;
+    }
+
+    /**
+     * Iterating elements
+     *
      * @param $callback
      * @return \Illuminate\Support\Collection|\Tightenco\Collect\Support\Collection
      */
@@ -184,7 +212,7 @@ class Elements
     /**
      * Gets the attributes of all the elements
      *
-     * @param $attr HTML attribute name
+     * @param string $attr HTML attribute name
      * @return \Illuminate\Support\Collection|\Tightenco\Collect\Support\Collection
      */
     public function attrs($attr)
