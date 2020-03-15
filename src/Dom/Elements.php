@@ -219,6 +219,19 @@ class Elements
     }
 
     /**
+     * Gets the htmlOuter of all the elements
+     *
+     * @return \Illuminate\Support\Collection|\Tightenco\Collect\Support\Collection
+     */
+    public function htmlOuters()
+    {
+        return $this->map(function($item){
+            return trim($item->htmlOuter());
+        });
+    }
+
+
+    /**
      * @return phpQueryObject
      */
     public function getElements(): phpQueryObject
