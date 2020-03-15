@@ -49,6 +49,9 @@ class Query
     public function setHtml($html, $charset = null)
     {
         $this->html = value($html);
+        if($this->document){
+            $this->destroyDocument();
+        }
         $this->document = phpQuery::newDocumentHTML($this->html,$charset);
         return $this->ql;
     }
