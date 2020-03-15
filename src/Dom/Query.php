@@ -145,7 +145,13 @@ class Query
     protected function getList()
     {
         $data = [];
-        if (!empty($this->range)) {
+        if (empty($this->range)) {
+            foreach ($this->rules as $key => $reg_value){
+                $rule = $this->parseRule($reg_value);
+                $contentElements = $this->document->find($rule['selector']);
+                $data[$key] = $this->extractContent($contentElements, $key, $rule);
+            }
+        } else {
             $rangeElements  = $this->document->find($this->range);
             $i = 0;
             foreach ($rangeElements as $element) {
@@ -155,16 +161,6 @@ class Query
                     $data[$i][$key] = $this->extractContent($contentElements, $key, $rule);
                 }
                 $i++;
-            }
-        } else {
-            foreach ($this->rules as $key => $reg_value){
-                $rule = $this->parseRule($reg_value);
-                $contentElements = $this->document->find($rule['selector']);
-                $i = 0;
-                foreach ($contentElements as $element) {
-                    $data[$i][$key] = $this->extractContent(pq($element), $key, $rule);
-                    $i++;
-                }
             }
         }
 
@@ -203,7 +199,7 @@ class Query
                 break;
         }
 
-        if($rule['handle_callback']){
+        if(is_callable($rule['handle_callback'])){
             $content = call_user_func($rule['handle_callback'], $content, $ruleName);
         }
 
