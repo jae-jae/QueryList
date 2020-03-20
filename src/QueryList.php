@@ -105,6 +105,15 @@ class QueryList
      */
     public function destruct()
     {
+        unset($this->query);
+        unset($this->kernel);
+    }
+
+    /**
+     * Destroy all documents
+     */
+    public static function destructDocuments()
+    {
         phpQuery::$documents = [];
     }
 
