@@ -35,11 +35,12 @@ class Query
     }
 
     /**
-     * @return mixed
+     * @param bool $rel
+     * @return String
      */
-    public function getHtml()
+    public function getHtml($rel = true)
     {
-        return $this->html;
+        return $rel ? $this->document->htmlOuter() : $this->html;
     }
 
     /**
