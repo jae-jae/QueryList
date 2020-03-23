@@ -23,7 +23,7 @@ use QL\Services\MultiRequestService;
  * Class QueryList
  * @package QL
  *
- * @method string getHtml()
+ * @method string getHtml($rel = true)
  * @method QueryList setHtml($html)
  * @method QueryList html($html)
  * @method Dom\Elements find($selector)

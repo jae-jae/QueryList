@@ -4,7 +4,7 @@
     "keywords":["QueryList","phpQuery","spider"],
     "homepage": "http://querylist.cc",
     "require": {
-        "PHP":">=7.0",
+        "PHP":">=7.1",
         "jaeger/phpquery-single": "^1",
         "tightenco/collect": "^5",
         "jaeger/g-http": "^1.1",
