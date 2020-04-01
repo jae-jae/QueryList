@@ -17,7 +17,7 @@ class FindTest extends TestCaseBase
     protected $html;
     protected $ql;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->html = $this->getSnippet('snippet-1');
         $this->ql = QueryList::html($this->html);

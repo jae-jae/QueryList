@@ -18,7 +18,7 @@ class RulesTest extends TestCaseBase
     protected $html;
     protected $ql;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->html = $this->getSnippet('snippet-2');
         $this->ql = QueryList::html($this->html);

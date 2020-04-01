@@ -16,7 +16,7 @@ class MethodTest extends TestCaseBase
 {
     protected $html;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->html = $this->getSnippet('snippet-1');
     }
@@ -30,7 +30,7 @@ class MethodTest extends TestCaseBase
         $qlHtml = QueryList::pipe(function(QueryList $ql) use($html){
             $ql->setHtml($html);
             return $ql;
-        })->getHtml();
+        })->getHtml(false);
         $this->assertEquals($html,$qlHtml);
     }
 }

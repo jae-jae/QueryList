@@ -16,7 +16,7 @@ class InstanceTest extends TestCaseBase
 {
     protected $html;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->html = $this->getSnippet('snippet-1');
     }
@@ -38,11 +38,11 @@ class InstanceTest extends TestCaseBase
     public function get_new_object()
     {
         $ql = (new QueryList())->html($this->html);
-        $ql2 = new QueryList();
+        $ql2 = (new QueryList())->html('');
         $this->assertNotEquals($ql->getHtml(),$ql2->getHtml());
 
         $ql = QueryList::range('')->html($this->html);
-        $ql2 = QueryList::range('');
+        $ql2 = QueryList::range('')->html('');
         $this->assertNotEquals($ql->getHtml(),$ql2->getHtml());
     }
 }

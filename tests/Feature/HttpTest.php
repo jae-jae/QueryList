@@ -18,7 +18,7 @@ class HttpTest extends TestCaseBase
 {
     protected $urls;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->urls = [
             'http://httpbin.org/get?name=php',
