@@ -9,6 +9,7 @@ namespace QL\Dom;
 
 use phpDocumentor\Reflection\Types\Null_;
 use phpQueryObject;
+use Tightenco\Collect\Support\Collection;
 
 /**
  * Class Elements
@@ -191,7 +192,7 @@ class Elements
      */
     public function map($callback)
     {
-        $collection = collect();
+        $collection = new Collection();
         $this->elements->each(function ($dom) use (& $collection, $callback) {
             $collection->push($callback(new self(pq($dom))));
         });

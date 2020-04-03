@@ -14,6 +14,7 @@ use Closure;
 use QL\Providers\HttpServiceProvider;
 use QL\Providers\PluginServiceProvider;
 use QL\Providers\SystemServiceProvider;
+use Tightenco\Collect\Support\Collection;
 
 class Kernel
 {
@@ -34,7 +35,7 @@ class Kernel
     public function __construct(QueryList $ql)
     {
         $this->ql = $ql;
-        $this->binds = collect();
+        $this->binds = new Collection();
     }
 
     public function bootstrap()
