@@ -147,7 +147,7 @@ class Query
     {
         if (is_callable($callback)) {
             if (empty($this->range)) {
-                $data = collect($callback($data->all(), null));
+                $data = new Collection($callback($data->all(), null));
             } else {
                 $data = $data->map($callback);
             }
@@ -178,7 +178,7 @@ class Query
             }
         }
 
-        return collect($data);
+        return new Collection($data);
     }
 
     protected function extractContent(phpQueryObject $pqObj, $ruleName, $rule)

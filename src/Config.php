@@ -7,6 +7,7 @@
 
 namespace QL;
 use Closure;
+use Tightenco\Collect\Support\Collection;
 
 class Config
 {
@@ -20,8 +21,8 @@ class Config
      */
     public function __construct()
     {
-        $this->plugins = collect();
-        $this->binds = collect();
+        $this->plugins = new Collection();
+        $this->binds = new Collection();
     }
 
 
