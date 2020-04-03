@@ -209,7 +209,13 @@ class Query
                 })->all();
                 break;
             default:
-                $content = $pqObj->attr($rule['attr']);
+                if(preg_match('/attr\((.+)\)/', $rule['attr'], $arr)) {
+                    $content = $pqObj->attr($arr[1]);
+                } elseif (preg_match('/attrs\((.+)\)/', $rule['attr'], $arr)) {
+                    $content = (new Elements($pqObj))->attrs($arr[1])->all();
+                } else {
+                    $content = $pqObj->attr($rule['attr']);
+                }
                 break;
         }
 
