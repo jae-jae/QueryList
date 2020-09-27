@@ -6,9 +6,9 @@
     "require": {
         "PHP":">=7.1",
         "jaeger/phpquery-single": "^1",
-        "tightenco/collect": "^5",
         "jaeger/g-http": "^1.1",
-        "ext-dom": "*"
+        "ext-dom": "*",
+        "tightenco/collect": "^8.0"
     },
     "suggest":{
 
