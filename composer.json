@@ -8,7 +8,7 @@
         "jaeger/phpquery-single": "^1",
         "jaeger/g-http": "^1.1",
         "ext-dom": "*",
-        "tightenco/collect": "^8.0"
+        "tightenco/collect": ">5.0"
     },
     "suggest":{
 
