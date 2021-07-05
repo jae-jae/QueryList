@@ -125,7 +125,7 @@ class Query
      */
     public function removeHead()
     {
-        $html = preg_replace('/<head.+?>.+<\/head>/is', '<head></head>', $this->html);
+        $html = preg_replace('/(<head>|<head\s+.+?>).+<\/head>/is', '<head></head>', $this->html);
         $this->setHtml($html);
         return $this->ql;
     }
