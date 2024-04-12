@@ -8,7 +8,7 @@
         "jaeger/phpquery-single": "^1",
         "jaeger/g-http": "^1.1",
         "ext-dom": "*",
-        "tightenco/collect": ">5.0"
+        "symfony/var-dumper": ">3.4"
     },
     "suggest":{
 
@@ -26,12 +26,15 @@
         }
     },
     "autoload-dev": {
+        "files": [
+            "src/Collect/Support/helpers.php",
+            "src/Collect/Support/alias.php"
+        ],
         "psr-4": {
             "Tests\\": "tests/"
         }
     },
     "require-dev": {
-        "symfony/var-dumper": "^3.3",
         "phpunit/phpunit": "^8.5"
     },
     "scripts": {

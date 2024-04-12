@@ -7,7 +7,7 @@
 
 namespace QL\Dom;
 
-use Tightenco\Collect\Support\Collection;
+use QL\Collect\Support\Collection;
 use phpQuery;
 use phpQueryObject;
 use QL\QueryList;

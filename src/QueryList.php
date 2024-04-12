@@ -14,7 +14,7 @@
 namespace QL;
 use phpQuery;
 use QL\Dom\Query;
-use Tightenco\Collect\Support\Collection;
+use QL\Collect\Support\Collection;
 use Closure;
 use QL\Services\MultiRequestService;
 

@@ -11,7 +11,7 @@ namespace Tests\Dom;
 
 use QL\QueryList;
 use Tests\TestCaseBase;
-use Tightenco\Collect\Support\Collection;
+use QL\Collect\Support\Collection;
 
 class RulesTest extends TestCaseBase
 {

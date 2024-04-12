@@ -7,7 +7,7 @@
 
 namespace QL;
 use Closure;
-use Tightenco\Collect\Support\Collection;
+use QL\Collect\Support\Collection;
 
 class Config
 {
