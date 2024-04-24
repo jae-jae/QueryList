@@ -498,11 +498,14 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
             }
 
             foreach ($groupKeys as $groupKey) {
-                $groupKey = match (true) {
-                    is_bool($groupKey) => (int) $groupKey,
-                    $groupKey instanceof \Stringable => (string) $groupKey,
-                    default => $groupKey,
-                };
+                
+                if (is_bool($groupKey)) {
+                    $groupKey = (int) $groupKey;
+                } elseif ($groupKey instanceof \Stringable) {
+                    $groupKey = (string) $groupKey;
+                } else {
+                    // No transformation needed
+                }
 
                 if (! array_key_exists($groupKey, $results)) {
                     $results[$groupKey] = new static;
