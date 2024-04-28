@@ -31,7 +31,7 @@ Through plug-ins you can easily implement things like:
 - .....
 
 ## Requirements
-- PHP >= 7.1
+- PHP >= 8.0
 
 ## Installation
 By Composer installation:
