@@ -6,7 +6,7 @@
     "require": {
         "PHP":">=8.0",
         "jaeger/phpquery-single": "^1",
-        "jaeger/g-http": "^1.8",
+        "jaeger/g-http": "^2.0",
         "ext-dom": "*",
         "symfony/var-dumper": ">3.4"
     },
