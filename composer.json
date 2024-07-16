@@ -23,7 +23,11 @@
     "autoload":{
         "psr-4":{
             "QL\\":"src"
-        }
+        },
+        "files": [
+            "src/Collect/Support/helpers.php",
+            "src/Collect/Support/alias.php"
+        ]
     },
     "autoload-dev": {
         "files": [
