@@ -20,11 +20,11 @@ class SystemServiceProvider implements ServiceProviderContract
             return $this;
         });
 
-        $kernel->bind('queryData',function (Closure $callback = null){
+        $kernel->bind('queryData',function (?Closure $callback = null){
             return $this->query()->getData($callback)->all();
         });
 
-        $kernel->bind('pipe',function (Closure $callback = null){
+        $kernel->bind('pipe',function (?Closure $callback = null){
             return $callback($this);
         });
 
