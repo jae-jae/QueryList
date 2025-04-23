@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.2" />
+    </filter>
+  </defs>
+  <rect width="200" height="200" rx="100" fill="white" />
+  <g transform="translate(40, 40)" filter="url(#shadow)">
+    <circle cx="60" cy="60" r="50" fill="none" stroke="url(#gradient)" stroke-width="16" />
+    <line x1="95" y1="95" x2="120" y2="120" stroke="url(#gradient)" stroke-width="16"
+      stroke-linecap="round" />
+
+    <rect x="20" y="55" width="80" height="10" rx="5" fill="url(#gradient)" />
+    <rect x="40" y="75" width="60" height="10" rx="5" fill="url(#gradient)" />
+    <rect x="30" y="35" width="70" height="10" rx="5" fill="url(#gradient)" />
+  </g>
+</svg>
