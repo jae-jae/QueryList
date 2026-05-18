@@ -145,7 +145,7 @@ $ql = QueryList::get('http://weibo.com','param1=testvalue & params2=somevalue',[
 echo $ql->find('title')->text();
 //输出: 我的首页 微博-随时随地发现新鲜事
 ```
-- 使用Http代理 (如果你正在寻找代理服务，这里有一个 [HTTP proxy provider](https://www.swiftproxy.net/?ref=QueryList) 可以看看)
+- 使用Http代理 (如果你正在寻找代理服务，这里有一个 [HTTP 代理提供商](https://www.swiftproxy.net/?ref=QueryList) 可以看看)
 ```php
 $urlParams = ['param1' => 'testvalue','params2' => 'somevalue'];
 $opts = [
