@@ -146,7 +146,7 @@ $ql = QueryList::get('https://github.com','param1=testvalue & params2=somevalue'
 $userName = $ql->find('.header-nav-current-user>.css-truncate-target')->text();
 echo $userName;
 ```
-- Use the Http proxy
+- Use the Http proxy (If you are looking for proxies to use, here is a [HTTP proxy provider](https://www.swiftproxy.net/?ref=QueryList) that you can take a look at.)
 ```php
 $urlParams = ['param1' => 'testvalue','params2' => 'somevalue'];
 $opts = [
