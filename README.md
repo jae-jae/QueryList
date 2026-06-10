@@ -39,6 +39,11 @@ By Composer installation:
 composer require jaeger/querylist
 ```
 
+
+## Sponsors
+
+<a href="https://www.thordata.com/?ls=dql\&lk=dql">Thordata proxy</a> - Thordata Global Residential Proxy IP Free Trial: Unlimited Bandwidth, 100+ Million Real IPs
+
 ## Usage
 
 #### DOM Traversal and Manipulation
