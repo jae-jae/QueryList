@@ -40,6 +40,11 @@ QueryList3 文档:http://v3.querylist.cc
 composer require jaeger/querylist
 ```
 
+
+## 赞助商
+
+<a href="https://www.thordata.com/?ls=dql&lk=dql">Thordata 代理</a> - Thordata 全球住宅代理 IP 免费试用：无限带宽，1 亿+ 真实 IP
+
 ## 使用
 
 #### 元素操作
