@@ -7,6 +7,10 @@
 # QueryList  简介
 `QueryList`是一套简洁、优雅、可扩展的PHP采集工具(爬虫)，基于phpQuery。
 
+## 赞助商
+
+<a href="https://www.thordata.com/?ls=dql&lk=dql">Thordata 代理</a> - Thordata 全球住宅代理 IP 免费试用：无限带宽，1 亿+ 真实 IP
+
 ## 特性
 - 拥有与jQuery完全相同的CSS3 DOM选择器
 - 拥有与jQuery完全相同的DOM操作API
@@ -39,11 +43,6 @@ QueryList3 文档:http://v3.querylist.cc
 ```
 composer require jaeger/querylist
 ```
-
-
-## 赞助商
-
-<a href="https://www.thordata.com/?ls=dql&lk=dql">Thordata 代理</a> - Thordata 全球住宅代理 IP 免费试用：无限带宽，1 亿+ 真实 IP
 
 ## 使用
 
