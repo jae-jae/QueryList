@@ -11,6 +11,11 @@
 
 [中文文档](README-ZH.md)
 
+
+## Sponsors
+
+<a href="https://www.thordata.com/?ls=dql&lk=dql">Thordata proxy</a> - Thordata Global Residential Proxy IP Free Trial: Unlimited Bandwidth, 100+ Million Real IPs
+
 ## Features
 - Have the same CSS3 DOM selector as jQuery
 - Have the same DOM manipulation API as jQuery
@@ -38,11 +43,6 @@ By Composer installation:
 ```
 composer require jaeger/querylist
 ```
-
-
-## Sponsors
-
-<a href="https://www.thordata.com/?ls=dql\&lk=dql">Thordata proxy</a> - Thordata Global Residential Proxy IP Free Trial: Unlimited Bandwidth, 100+ Million Real IPs
 
 ## Usage
 
