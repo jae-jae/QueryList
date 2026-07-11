@@ -9,7 +9,11 @@
 
 ## 赞助商
 
-<a href="https://www.thordata.com/?ls=dql&lk=dql">Thordata 代理</a> - Thordata 全球住宅代理 IP 免费试用：无限带宽，1 亿+ 真实 IP
+QueryList 用户可使用优惠码 `QueryList3GB` 在 SX.org 领取 3 GB 代理流量用于测试。
+
+<a href="https://sx.org/?c=bfXRnT"><img src="sx-org-banner.png" alt="SX.org" width="180"></a>
+
+为网页采集和数据收集提供稳定可靠的 HTTP 和 SOCKS5 代理 <a href="https://sx.org/?c=bfXRnT">SX.org</a>。
 
 ## 特性
 - 拥有与jQuery完全相同的CSS3 DOM选择器
@@ -150,6 +154,9 @@ echo $ql->find('title')->text();
 //输出: 我的首页 微博-随时随地发现新鲜事
 ```
 - 使用Http代理
+
+> 配置代理时，你也可以考虑 [SX.org](https://sx.org/?c=bfXRnT)。
+
 ```php
 $urlParams = ['param1' => 'testvalue','params2' => 'somevalue'];
 $opts = [
