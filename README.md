@@ -14,11 +14,11 @@
 
 ## Sponsors
 
-QueryList users can get 3 GB of proxy traffic for testing with promo code `QueryList3GB` from SX.org.
+<a href="https://www.rapidproxy.io/?ref=querylist"><img src="rapidproxy-banner.png" alt="RapidProxy — Residential Proxies Starting at $0.55/GB" width="100%"></a>
 
-<a href="https://sx.org/?c=bfXRnT"><img src="sx-org-banner.png" alt="SX.org" width="180"></a>
+[RapidProxy](https://www.rapidproxy.io/?ref=querylist) provides reliable residential proxies for web scraping, crawling, and large-scale data collection. Access 90M+ residential IPs worldwide with intelligent rotation, sticky sessions, geo-targeting, and high-concurrency support.
 
-Reliable HTTP and SOCKS5 proxies for web scraping and data collection <a href="https://sx.org/?c=bfXRnT">SX.org</a>.
+Residential proxies start at $0.55/GB with non-expiring bandwidth. Use code `RAPID10` for 10% off. [Try RapidProxy for free →](https://www.rapidproxy.io/?ref=querylist)
 
 ## Features
 - Have the same CSS3 DOM selector as jQuery
@@ -156,8 +156,6 @@ $userName = $ql->find('.header-nav-current-user>.css-truncate-target')->text();
 echo $userName;
 ```
 - Use the Http proxy
-
-> For proxy setup, you can also consider [SX.org](https://sx.org/?c=bfXRnT).
 
 ```php
 $urlParams = ['param1' => 'testvalue','params2' => 'somevalue'];
