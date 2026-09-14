@@ -9,11 +9,11 @@
 
 ## 赞助商
 
-QueryList 用户可使用优惠码 `QueryList3GB` 在 SX.org 领取 3 GB 代理流量用于测试。
+<a href="https://www.rapidproxy.io/?ref=querylist"><img src="rapidproxy-banner.png" alt="RapidProxy — 住宅代理低至 $0.55/GB" width="100%"></a>
 
-<a href="https://sx.org/?c=bfXRnT"><img src="sx-org-banner.png" alt="SX.org" width="180"></a>
+[RapidProxy](https://www.rapidproxy.io/?ref=querylist) 为网页抓取、爬虫和大规模数据采集提供可靠的住宅代理服务。可访问全球 9000 万+住宅 IP，并支持智能轮换、粘性会话、地理定位和高并发。
 
-为网页采集和数据收集提供稳定可靠的 HTTP 和 SOCKS5 代理 <a href="https://sx.org/?c=bfXRnT">SX.org</a>。
+住宅代理低至 $0.55/GB，流量永不过期。使用优惠码 `RAPID10` 可享九折优惠。[免费试用 RapidProxy →](https://www.rapidproxy.io/?ref=querylist)
 
 ## 特性
 - 拥有与jQuery完全相同的CSS3 DOM选择器
@@ -153,9 +153,7 @@ $ql = QueryList::get('http://weibo.com','param1=testvalue & params2=somevalue',[
 echo $ql->find('title')->text();
 //输出: 我的首页 微博-随时随地发现新鲜事
 ```
-- 使用Http代理
-
-> 配置代理时，你也可以考虑 [SX.org](https://sx.org/?c=bfXRnT)。
+- 使用 Http 代理
 
 ```php
 $urlParams = ['param1' => 'testvalue','params2' => 'somevalue'];
