@@ -14,11 +14,11 @@
 
 ## Sponsors
 
-<a href="https://www.rapidproxy.io/?ref=querylist"><img src="rapidproxy-banner.png" alt="RapidProxy — Residential Proxies Starting at $0.55/GB" width="100%"></a>
+<a href="https://proxy-seller.com/?partner=6YJUEQ0GWYHE0T"><img src="proxy-seller-banner.png" alt="Proxy-Seller — Reliable Proxy Infrastructure: Residential, Mobile, ISP & Datacenter Proxies" width="100%"></a>
 
-[RapidProxy](https://www.rapidproxy.io/?ref=querylist) provides reliable residential proxies for web scraping, crawling, and large-scale data collection. Access 90M+ residential IPs worldwide with intelligent rotation, sticky sessions, geo-targeting, and high-concurrency support.
+[Proxy-Seller](https://proxy-seller.com/?partner=6YJUEQ0GWYHE0T) gives you reliable proxy infrastructure for any workflow: private residential, mobile (4G/5G/LTE), ISP, and datacenter IPv4/IPv6 proxies, all with HTTP(S) and SOCKS5 support. Tap into 47M+ residential IPs across 220+ locations, target exactly the country, city, or ISP you need, and count on 99.7% uptime backed by 24/7 support.
 
-Residential proxies start at $0.55/GB with non-expiring bandwidth. Use code `RAPID10` for 10% off. [Try RapidProxy for free →](https://www.rapidproxy.io/?ref=querylist)
+Get 15% off with promo code `JAEJAE`. [Try Proxy-Seller →](https://proxy-seller.com/?partner=6YJUEQ0GWYHE0T)
 
 ## Features
 - Have the same CSS3 DOM selector as jQuery

@@ -9,11 +9,11 @@
 
 ## 赞助商
 
-<a href="https://www.rapidproxy.io/?ref=querylist"><img src="rapidproxy-banner.png" alt="RapidProxy — 住宅代理低至 $0.55/GB" width="100%"></a>
+<a href="https://proxy-seller.com/?partner=6YJUEQ0GWYHE0T"><img src="proxy-seller-banner.png" alt="Proxy-Seller — 可靠的代理基础设施：住宅、移动、ISP 与数据中心代理" width="100%"></a>
 
-[RapidProxy](https://www.rapidproxy.io/?ref=querylist) 为网页抓取、爬虫和大规模数据采集提供可靠的住宅代理服务。可访问全球 9000 万+住宅 IP，并支持智能轮换、粘性会话、地理定位和高并发。
+[Proxy-Seller](https://proxy-seller.com/?partner=6YJUEQ0GWYHE0T) 为各种工作场景提供可靠的代理基础设施：住宅、移动 (4G/5G/LTE)、ISP 和数据中心 IPv4/IPv6 代理，全部支持 HTTP(S) 和 SOCKS5。可用 220+ 地区的 4700 万+住宅 IP，精准定位到国家、城市或 ISP，99.7% 可用性并有 7×24 小时技术支持。
 
-住宅代理低至 $0.55/GB，流量永不过期。使用优惠码 `RAPID10` 可享九折优惠。[免费试用 RapidProxy →](https://www.rapidproxy.io/?ref=querylist)
+使用优惠码 `JAEJAE` 可享 85 折优惠。[免费试用 Proxy-Seller →](https://proxy-seller.com/?partner=6YJUEQ0GWYHE0T)
 
 ## 特性
 - 拥有与jQuery完全相同的CSS3 DOM选择器
